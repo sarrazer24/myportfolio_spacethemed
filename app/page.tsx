@@ -161,14 +161,14 @@ export default function SpacePortfolio() {
             {/* Bloom Care Backend */}
             <Card className="group bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:border-cyan-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20">
               <CardHeader>
-                <div className="w-24 h-24 rounded-xl bg-white p-2 mb-4 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
-                  <img src="/Bloom_&_Care_logo.png" alt="Bloom & Care Logo" className="w-full h-full object-cover rounded" />
+                <div className="w-24 h-24 rounded-xl mb-4 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
+                  <img src="/Bloom_&_Care_logo.png" alt="Bloom & Care Logo" className="w-full h-full object-cover rounded-xl" />
                 </div>
                 <CardTitle className="text-xl text-white group-hover:text-cyan-400 transition-colors">
                   Bloom Care Platform
                 </CardTitle>
                 <CardDescription className="text-gray-400">
-                  Full-stack mental health support platform. Authentication, user management, and more.
+                  A complete digital solution for managing daycare operations: child registration, attendance tracking, activity and meal planning, and parent communication — all aimed at improving daily organization and ensuring children's well-being.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -191,17 +191,6 @@ export default function SpacePortfolio() {
                       Code
                     </a>
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10"
-                    asChild
-                  >
-                    <a href="https://bloom-care-backend.onrender.com" target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Demo
-                    </a>
-                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -209,7 +198,7 @@ export default function SpacePortfolio() {
             {/* Happy Birthday Asmae */}
             <Card className="group bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:border-pink-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/20">
               <CardHeader>
-                <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-pink-500 to-red-500 p-3 mb-4 flex items-center justify-center group-hover:animate-pulse text-6xl">
+                <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-pink-200 to-pink-300 p-3 mb-4 flex items-center justify-center group-hover:animate-pulse text-6xl">
                   🎂
                 </div>
                 <CardTitle className="text-xl text-white group-hover:text-pink-400 transition-colors">
@@ -255,14 +244,14 @@ export default function SpacePortfolio() {
             {/* Educare Team Projects */}
             <Card className="group bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:border-purple-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
               <CardHeader>
-                <div className="w-24 h-24 rounded-xl bg-white p-2 mb-4 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
-                  <img src="/educare_logo.jpg" alt="Educare Logo" className="w-full h-full object-contain rounded" />
+                <div className="w-24 h-24 rounded-xl mb-4 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
+                  <img src="/educare_logo.jpg" alt="Educare Logo" className="w-full h-full object-cover rounded-xl" />
                 </div>
                 <CardTitle className="text-xl text-white group-hover:text-purple-400 transition-colors">
                   Educare Team Projects
                 </CardTitle>
                 <CardDescription className="text-gray-400">
-                  Contributed to all 3 repos (mainly mobile). Educational platform: backend, mobile, and frontend.
+                  A web application designed to digitalize the medical services at ESI-SBA, streamlining patient record management, minimizing human errors, ensuring data confidentiality through secure access control, and providing healthcare professionals with fast, reliable access to medical information.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -300,7 +289,7 @@ export default function SpacePortfolio() {
                   7arfa Mobile App
                 </CardTitle>
                 <CardDescription className="text-gray-400">
-                  Mobile word game app. Built with Flutter, Dart, Django, and SQLite.
+                  A mobile application that connects users with local craftsmen, making it easier to find nearby professionals for repairs, construction, and maintenance services.
                 </CardDescription>
               </CardHeader>
               <CardContent>
