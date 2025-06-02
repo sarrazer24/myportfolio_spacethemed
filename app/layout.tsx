@@ -16,7 +16,7 @@ const exo2 = Exo_2({
 })
 
 export const metadata: Metadata = {
-  title: "Alex Chen - Portfolio",
+  title: "Sarra Zerguerras - Portfolio",
   description: "Computer Science Student Portfolio - Exploring the cosmos of code and innovation",
     generator: 'v0.dev'
 }

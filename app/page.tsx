@@ -100,25 +100,26 @@ export default function SpacePortfolio() {
             <CardContent className="p-8">
               <div className="flex flex-col md:flex-row items-center gap-8">
                 <div className="w-48 h-48 rounded-full bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 p-1">
-                  <div className="w-full h-full rounded-full bg-gray-900 flex items-center justify-center">
-                    <Code className="w-20 h-20 text-cyan-400" />
-                  </div>
+                  <img
+                    src="/selfie.jpg"
+                    alt="Sarra Zerguerras"
+                    className="w-full h-full object-cover rounded-full border-4 border-gray-900"
+                  />
                 </div>
                 <div className="flex-1 text-center md:text-left">
                   <p className="text-2xl font-bold text-cyan-400 mb-2">Hi 👋, I'm Sarra</p>
                   <p className="text-lg text-gray-300 leading-relaxed mb-4">
-                    Passionate about mobile development, backend logic, and elegant UI/UX.
+                    Computer Engineering student at{" "}
+                    <span className="text-purple-400 font-semibold">ESI SBA</span>.
                   </p>
                   <p className="text-lg text-gray-300 leading-relaxed mb-4">
+                    Passionate about mobile development, backend logic, and elegant UI/UX.<br />
                     I'm currently working on a{" "}
                     <span className="text-purple-400 font-semibold">
                       Voice Emotion Recognition AI
                     </span>{" "}
-                    — detecting human emotions through audio signals.
-                    <br />
-                    I’m deepening my knowledge of AI/ML fundamentals, emotion analysis, and UI design using Tailwind
-                    CSS.
-                    <br />
+                    — detecting human emotions through audio signals.<br />
+                    I’m deepening my knowledge of AI/ML fundamentals, emotion analysis, and UI design using Tailwind CSS.<br />
                     I love building apps with{" "}
                     <span className="text-cyan-400 font-semibold">Flutter</span>,{" "}
                     <span className="text-cyan-400 font-semibold">Node.js</span>, and{" "}
@@ -157,81 +158,175 @@ export default function SpacePortfolio() {
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: "AI Chatbot Assistant",
-                description:
-                  "An intelligent chatbot powered by machine learning algorithms for natural language processing.",
-                tech: ["Python", "TensorFlow", "Flask"],
-                icon: <Cpu className="w-8 h-8" />,
-                gradient: "from-cyan-500 to-blue-500",
-              },
-              {
-                title: "Space Weather Tracker",
-                description: "Real-time space weather monitoring dashboard with data visualization and alerts.",
-                tech: ["React", "Node.js", "D3.js"],
-                icon: <Star className="w-8 h-8" />,
-                gradient: "from-purple-500 to-pink-500",
-              },
-              {
-                title: "Quantum Algorithm Simulator",
-                description: "A web-based quantum computing simulator for educational purposes.",
-                tech: ["JavaScript", "WebGL", "Python"],
-                icon: <Zap className="w-8 h-8" />,
-                gradient: "from-pink-500 to-red-500",
-              },
-              {
-                title: "Blockchain Voting System",
-                description: "Secure and transparent voting platform using blockchain technology.",
-                tech: ["Solidity", "Web3.js", "React"],
-                icon: <Database className="w-8 h-8" />,
-                gradient: "from-green-500 to-cyan-500",
-              },
-            ].map((project, index) => (
-              <Card
-                key={index}
-                className="group bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:border-cyan-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20"
-              >
-                <CardHeader>
-                  <div
-                    className={`w-16 h-16 rounded-lg bg-gradient-to-br ${project.gradient} p-3 mb-4 group-hover:animate-pulse`}
+            {/* Bloom Care Backend */}
+            <Card className="group bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:border-cyan-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20">
+              <CardHeader>
+                <div className="w-24 h-24 rounded-xl bg-white p-2 mb-4 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
+                  <img src="/Bloom_&_Care_logo.png" alt="Bloom & Care Logo" className="w-full h-full object-cover rounded" />
+                </div>
+                <CardTitle className="text-xl text-white group-hover:text-cyan-400 transition-colors">
+                  Bloom Care Platform
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Full-stack mental health support platform. Authentication, user management, and more.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">Spring Boot</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">React</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">Tailwind CSS</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">CSS</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">MySQL (Aiven Cloud)</Badge>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+                    asChild
                   >
-                    <div className="text-white">{project.icon}</div>
-                  </div>
-                  <CardTitle className="text-xl text-white group-hover:text-cyan-400 transition-colors">
-                    {project.title}
-                  </CardTitle>
-                  <CardDescription className="text-gray-400">{project.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tech.map((tech) => (
-                      <Badge key={tech} variant="secondary" className="bg-gray-800 text-gray-300">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
-                    >
+                    <a href="https://github.com/sarrazer24/Bloom-Care_backend" target="_blank" rel="noopener noreferrer">
                       <Github className="w-4 h-4 mr-2" />
                       Code
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10"
-                    >
+                    </a>
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10"
+                    asChild
+                  >
+                    <a href="https://bloom-care-backend.onrender.com" target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="w-4 h-4 mr-2" />
                       Demo
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    </a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Happy Birthday Asmae */}
+            <Card className="group bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:border-pink-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/20">
+              <CardHeader>
+                <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-pink-500 to-red-500 p-3 mb-4 flex items-center justify-center group-hover:animate-pulse text-6xl">
+                  🎂
+                </div>
+                <CardTitle className="text-xl text-white group-hover:text-pink-400 transition-colors">
+                  Happy Birthday Asmae
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  A fun and interactive birthday greeting web app.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">React</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">JavaScript</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">Tailwind CSS</Badge>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+                    asChild
+                  >
+                    <a href="https://github.com/sarrazer24/happy_birthday_asmae" target="_blank" rel="noopener noreferrer">
+                      <Github className="w-4 h-4 mr-2" />
+                      Code
+                    </a>
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10"
+                    asChild
+                  >
+                    <a href="https://happy-birthday-asmae.onrender.com/" target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Demo
+                    </a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Educare Team Projects */}
+            <Card className="group bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:border-purple-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
+              <CardHeader>
+                <div className="w-24 h-24 rounded-xl bg-white p-2 mb-4 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
+                  <img src="/educare_logo.jpg" alt="Educare Logo" className="w-full h-full object-contain rounded" />
+                </div>
+                <CardTitle className="text-xl text-white group-hover:text-purple-400 transition-colors">
+                  Educare Team Projects
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Contributed to all 3 repos (mainly mobile). Educational platform: backend, mobile, and frontend.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">Node.js (Backend)</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">Flutter & Dart (Mobile)</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">React</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">Tailwind CSS</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">REST APIs</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">MySQL (Aiven Cloud)</Badge>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+                    asChild
+                  >
+                    <a href="https://github.com/EducareEquipe1" target="_blank" rel="noopener noreferrer">
+                      <Github className="w-4 h-4 mr-2" />
+                      Team Repos
+                    </a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 7arfa Mobile App */}
+            <Card className="group bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:border-purple-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
+              <CardHeader>
+                <div className="w-24 h-24 rounded-xl bg-white p-2 mb-4 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
+                  <img src="/7arfa_logo.jpg" alt="7arfa Logo" className="w-full h-full object-contain rounded" />
+                </div>
+                <CardTitle className="text-xl text-white group-hover:text-purple-400 transition-colors">
+                  7arfa Mobile App
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Mobile word game app. Built with Flutter, Dart, Django, and SQLite.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">Flutter</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">Dart</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">Django</Badge>
+                  <Badge variant="secondary" className="bg-gray-800 text-gray-300">SQLite</Badge>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+                    asChild
+                  >
+                    <a href="https://github.com/riham-esi/2cp-project" target="_blank" rel="noopener noreferrer">
+                      <Github className="w-4 h-4 mr-2" />
+                      Code
+                    </a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* ...other projects... */}
           </div>
         </div>
       </section>
@@ -256,28 +351,28 @@ export default function SpacePortfolio() {
                 </div>
               </CardContent>
             </Card>
-            {/* Mobile */}
-            <Card className="bg-gray-900/50 border-pink-500/20 backdrop-blur-sm">
+            {/* Mobile - PURPLE */}
+            <Card className="bg-gray-900/50 border-purple-500/20 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-pink-400">Mobile</CardTitle>
+                <CardTitle className="text-purple-400">Mobile</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
                   {["Dart", "Flutter"].map(skill => (
-                    <Badge key={skill} variant="outline" className="border-pink-500/50 text-pink-400">{skill}</Badge>
+                    <Badge key={skill} variant="outline" className="border-purple-500/50 text-purple-400">{skill}</Badge>
                   ))}
                 </div>
               </CardContent>
             </Card>
-            {/* Backend */}
-            <Card className="bg-gray-900/50 border-purple-500/20 backdrop-blur-sm">
+            {/* Backend - PINK */}
+            <Card className="bg-gray-900/50 border-pink-500/20 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-purple-400">Backend</CardTitle>
+                <CardTitle className="text-pink-400">Backend</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
                   {["Node.js", "Express.js", "Spring Boot", "Django", "JWT", "Nodemon"].map(skill => (
-                    <Badge key={skill} variant="outline" className="border-purple-500/50 text-purple-400">{skill}</Badge>
+                    <Badge key={skill} variant="outline" className="border-pink-500/50 text-pink-400">{skill}</Badge>
                   ))}
                 </div>
               </CardContent>
