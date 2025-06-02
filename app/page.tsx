@@ -101,7 +101,7 @@ export default function SpacePortfolio() {
               <div className="flex flex-col md:flex-row items-center gap-8">
                 <div className="w-48 h-48 rounded-full bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 p-1">
                   <img
-                    src="/testmypicture.jpg"
+                    src="/mypicture.jpg"
                     alt="Sarra Zerguerras"
                     className="w-full h-full object-cover rounded-full border-4 border-gray-900"
                   />
