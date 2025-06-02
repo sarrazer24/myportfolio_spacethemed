@@ -1,0 +1,5 @@
+[packages]
+nodeVersion = "18"
+
+[build]
+command = "npm install && npm run build"
