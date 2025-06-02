@@ -25,16 +25,15 @@ export default function SpacePortfolio() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+    <div className="min-h-screen bg-black text-white overflow-x-hidden relative z-10">
       {/* Animated Starfield Background */}
-      <div className="fixed inset-0 z-0">
+      <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="stars"></div>
         <div className="stars2"></div>
         <div className="stars3"></div>
       </div>
 
-      {/* Cosmic Gradient Overlay */}
-      <div className="fixed inset-0 z-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-pink-900/20"></div>
+      <div className="fixed inset-0 z-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-pink-900/20 pointer-events-none"></div>
 
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-md border-b border-cyan-500/20">
@@ -44,7 +43,7 @@ export default function SpacePortfolio() {
               Portfolio
             </div>
             <div className="hidden md:flex space-x-8">
-              {["Home", "About", "Projects", "Skills", "Contact"].map((item) => (
+              {["Home", "About", "Projects", "Skills", "Certificates", "Contact"].map((item) => (
                 <button
                   key={item}
                   onClick={() => scrollToSection(item.toLowerCase())}
@@ -109,22 +108,24 @@ export default function SpacePortfolio() {
                 <div className="flex-1 text-center md:text-left">
                   <p className="text-2xl font-bold text-cyan-400 mb-2">Hi 👋, I'm Sarra</p>
                   <p className="text-lg text-gray-300 leading-relaxed mb-4">
-                    Computer Engineering student at{" "}
-                    <span className="text-purple-400 font-semibold">ESI SBA</span>.
+                    I'm a Computer Engineering student at{" "}
+                    <span className="text-purple-400 font-semibold">ESI SBA</span> with a passion for building things that make life easier and more inspiring.
                   </p>
                   <p className="text-lg text-gray-300 leading-relaxed mb-4">
-                    Passionate about mobile development, backend logic, and elegant UI/UX.<br />
-                    I'm currently working on a{" "}
+                    When I'm not coding, you'll find me lost in a good book or gazing at the stars—I'm a huge book lover and absolutely obsessed with space, the cosmos, and all things dreamy. That’s actually the inspiration behind this website’s theme!
+                  </p>
+                  <p className="text-lg text-gray-300 leading-relaxed mb-4">
+                    I love crafting elegant mobile apps, designing seamless backend logic, and bringing creative UI/UX ideas to life.<br />
+                    Currently, I’m working on a{" "}
                     <span className="text-purple-400 font-semibold">
                       Voice Emotion Recognition AI
                     </span>{" "}
-                    — detecting human emotions through audio signals.<br />
-                    I’m deepening my knowledge of AI/ML fundamentals, emotion analysis, and UI design using Tailwind CSS.<br />
-                    I love building apps with{" "}
+                    — exploring how technology can understand and respond to human emotions.<br />
+                    I’m always learning more about AI/ML, emotion analysis, and modern web design with Tailwind CSS.<br />
+                    My favorite tools are{" "}
                     <span className="text-cyan-400 font-semibold">Flutter</span>,{" "}
                     <span className="text-cyan-400 font-semibold">Node.js</span>, and{" "}
-                    <span className="text-cyan-400 font-semibold">MySQL</span> — with a touch of humor and lots of
-                    chocolate 🍫.
+                    <span className="text-cyan-400 font-semibold">MySQL</span>—and I believe every project is better with a bit of creativity, curiosity, and (of course) chocolate 🍫.
                   </p>
                   <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                     <Badge variant="outline" className="border-cyan-500/50 text-cyan-400">
@@ -474,11 +475,142 @@ export default function SpacePortfolio() {
         </div>
       </section>
 
+      {/* Certificates Section */}
+      <section id="certificates" className="py-20 px-6">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+            Certificates
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* AWS Concepts */}
+            <div className="bg-gray-900/50 p-6 rounded-lg shadow">
+              <h3 className="text-xl font-semibold text-cyan-400 mb-2">AWS Concepts</h3>
+              <p className="text-gray-300 mb-2">DataCamp &mdash; Statement of Accomplishment</p>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10 mt-4"
+                asChild
+              >
+                <a
+                  href="https://drive.google.com/file/d/18LAvTFHPSng6qMgeXcmw7dpRZkA27XkG/view?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  View Statement
+                </a>
+              </Button>
+            </div>
+            {/* Functions for Manipulating Data in PostgreSQL */}
+            <div className="bg-gray-900/50 p-6 rounded-lg shadow">
+              <h3 className="text-xl font-semibold text-cyan-400 mb-2">Functions for Manipulating Data in PostgreSQL</h3>
+              <p className="text-gray-300 mb-2">DataCamp &mdash; Statement of Accomplishment</p>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10 mt-4"
+                asChild
+              >
+                <a
+                  href="https://drive.google.com/file/d/1MNC-exHWJW7XGQQiMdzalWx8f9Ho7qE5/view?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  View Statement
+                </a>
+              </Button>
+            </div>
+            {/* Intermediate SQL */}
+            <div className="bg-gray-900/50 p-6 rounded-lg shadow">
+              <h3 className="text-xl font-semibold text-cyan-400 mb-2">Intermediate SQL</h3>
+              <p className="text-gray-300 mb-2">DataCamp &mdash; Statement of Accomplishment</p>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10 mt-4"
+                asChild
+              >
+                <a
+                  href="https://drive.google.com/file/d/17QbWs-UORvoqY3AxqVGCx9NeI2xXECHe/view?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  View Statement
+                </a>
+              </Button>
+            </div>
+            {/* Introduction to Python */}
+            <div className="bg-gray-900/50 p-6 rounded-lg shadow">
+              <h3 className="text-xl font-semibold text-cyan-400 mb-2">Introduction to Python</h3>
+              <p className="text-gray-300 mb-2">DataCamp &mdash; Statement of Accomplishment</p>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10 mt-4"
+                asChild
+              >
+                <a
+                  href="https://drive.google.com/file/d/1w0maP1MxV23yQ3uJuwtA2clD9y7tOatC/view?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  View Statement
+                </a>
+              </Button>
+            </div>
+            {/* Introduction to SQL */}
+            <div className="bg-gray-900/50 p-6 rounded-lg shadow">
+              <h3 className="text-xl font-semibold text-cyan-400 mb-2">Introduction to SQL</h3>
+              <p className="text-gray-300 mb-2">DataCamp &mdash; Statement of Accomplishment</p>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10 mt-4"
+                asChild
+              >
+                <a
+                  href="https://drive.google.com/file/d/1695aGhQqHFioHLwtYOlDg-cn-adOH6Om/view?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  View Statement
+                </a>
+              </Button>
+            </div>
+            {/* Understanding Cloud Computing */}
+            <div className="bg-gray-900/50 p-6 rounded-lg shadow">
+              <h3 className="text-xl font-semibold text-cyan-400 mb-2">Understanding Cloud Computing</h3>
+              <p className="text-gray-300 mb-2">DataCamp &mdash; Statement of Accomplishment</p>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10 mt-4"
+                asChild
+              >
+                <a
+                  href="https://drive.google.com/file/d/1dz7pyD28a0Pbf7_qM35KIgfGwM2MIXPy/view?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  View Statement
+                </a>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
       <section id="contact" className="relative py-20 px-6">
         <div className="container mx-auto max-w-4xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-            Contact
+<h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+            Contact Me
           </h2>
 
           <div className="grid md:grid-cols-2 gap-12">
