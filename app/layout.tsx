@@ -24,13 +24,22 @@ export const metadata: Metadata = {
     description: "Computer Science Student Portfolio - Exploring the cosmos of code and innovation",
     url: "https://sarra-zerguerras-portfolio-space-themed.onrender.com/",
     siteName: "Sarra Zerguerras Portfolio",
+    images: [
+      {
+        url: "/og-preview.png", // <-- This should be a screenshot of your site, not your selfie
+        width: 1200,
+        height: 630,
+        alt: "Preview of Sarra Zerguerras Portfolio website",
+      },
+    ],
     locale: "en_US",
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Sarra Zerguerras - Portfolio",
     description: "Computer Science Student Portfolio - Exploring the cosmos of code and innovation",
+    images: ["/og-preview.png"],
   },
 }
 
