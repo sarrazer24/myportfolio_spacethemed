@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     siteName: "Sarra Zerguerras Portfolio",
     images: [
       {
-        url: "https://sarra-zerguerras-portfolio-space-themed.onrender.com/preview.jpg",
+        url: "https://sarra-zerguerras-portfolio-space-themed.onrender.com/og-preview.jpg",
         width: 1200,
         height: 630,
         alt: "Preview of Sarra Zerguerras Portfolio website",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Sarra Zerguerras - Portfolio",
     description: "Computer Science Student Portfolio - Exploring the cosmos of code and innovation",
-    images: ["https://sarra-zerguerras-portfolio-space-themed.onrender.com/preview.jpg"],
+    images: ["https://sarra-zerguerras-portfolio-space-themed.onrender.com/og-preview.jpg"],
   },
 }
 
@@ -52,10 +52,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${orbitron.variable} ${exo2.variable}`}>
       <Head>
-        <meta property="og:image" content="https://sarra-zerguerras-portfolio-space-themed.onrender.com/preview.jpg" />
+        <meta property="og:image" content="https://sarra-zerguerras-portfolio-space-themed.onrender.com/og-preview.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta name="twitter:image" content="https://sarra-zerguerras-portfolio-space-themed.onrender.com/preview.jpg" />
+        <meta name="twitter:image" content="https://sarra-zerguerras-portfolio-space-themed.onrender.com/og-preview.jpg" />
       </Head>
       <body className="font-exo2">{children}</body>
     </html>
