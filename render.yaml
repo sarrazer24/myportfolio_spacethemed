@@ -3,7 +3,7 @@ services:
     name: myportfolio
     env: node
     buildCommand: pnpm install && pnpm build
-    startCommand: pnpm start
+    startCommand: node .next/standalone/server.js
     runtime: node
     region: oregon
     branch: main
