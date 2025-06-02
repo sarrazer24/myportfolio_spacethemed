@@ -18,7 +18,20 @@ const exo2 = Exo_2({
 export const metadata: Metadata = {
   title: "Sarra Zerguerras - Portfolio",
   description: "Computer Science Student Portfolio - Exploring the cosmos of code and innovation",
-    generator: 'v0.dev'
+  generator: 'sarra portfolio',
+  openGraph: {
+    title: "Sarra Zerguerras - Portfolio",
+    description: "Computer Science Student Portfolio - Exploring the cosmos of code and innovation",
+    url: "https://sarra-zerguerras-portfolio-space-themed.onrender.com/",
+    siteName: "Sarra Zerguerras Portfolio",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Sarra Zerguerras - Portfolio",
+    description: "Computer Science Student Portfolio - Exploring the cosmos of code and innovation",
+  },
 }
 
 export default function RootLayout({
