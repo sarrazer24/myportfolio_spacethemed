@@ -6,7 +6,7 @@ import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Github, Linkedin, Mail, ExternalLink, Code, Database, Globe, Cpu, Star, Rocket, Zap } from "lucide-react"
+import { Github, Linkedin, Instagram, Mail, ExternalLink, Code, Database, Cpu, Star, Rocket, Zap } from "lucide-react"
 
 export default function SpacePortfolio() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -501,9 +501,20 @@ export default function SpacePortfolio() {
                   </a>
                 </div>
                 <div className="flex items-center">
-                  <Globe className="w-6 h-6 text-pink-400 mr-4" />
-                  <a href="https://instagram.com/sarra.zerguerras" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:underline">
+                  <Instagram className="w-6 h-6 text-pink-400 mr-4" />
+                  <a
+                    href="https://instagram.com/sarra.zerguerras"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-300 hover:underline"
+                  >
                     instagram.com/sarra.zerguerras
+                  </a>
+                </div>
+                <div className="flex items-center">
+                  <Github className="w-6 h-6 text-gray-400 mr-4" />
+                  <a href="https://github.com/sarrazer24" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:underline">
+                    github.com/sarrazer24
                   </a>
                 </div>
               </div>
