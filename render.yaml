@@ -2,7 +2,7 @@ services:
   - type: web
     name: myportfolio
     env: node
-    buildCommand: npm install
+    buildCommand: npm install && npm run build
     startCommand: npm start
     runtime: node
     region: oregon
