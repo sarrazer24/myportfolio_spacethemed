@@ -165,7 +165,7 @@ export default function SpacePortfolio() {
                   <img src="/Bloom_&_Care_logo.png" alt="Bloom & Care Logo" className="w-full h-full object-cover rounded-xl" />
                 </div>
                 <CardTitle className="text-xl text-white group-hover:text-cyan-400 transition-colors">
-                  Bloom Care Platform
+                  Bloom & Care 
                 </CardTitle>
                 <CardDescription className="text-gray-400">
                   A complete digital solution for managing daycare operations: child registration, attendance tracking, activity and meal planning, and parent communication — all aimed at improving daily organization and ensuring children's well-being.
@@ -202,7 +202,7 @@ export default function SpacePortfolio() {
                   🎂
                 </div>
                 <CardTitle className="text-xl text-white group-hover:text-pink-400 transition-colors">
-                  Happy Birthday Asmae
+                  Happy Birthday Gift
                 </CardTitle>
                 <CardDescription className="text-gray-400">
                   A fun and interactive birthday greeting web app.
@@ -248,7 +248,7 @@ export default function SpacePortfolio() {
                   <img src="/educare_logo.jpg" alt="Educare Logo" className="w-full h-full object-cover rounded-xl" />
                 </div>
                 <CardTitle className="text-xl text-white group-hover:text-purple-400 transition-colors">
-                  Educare Team Projects
+                  Educare
                 </CardTitle>
                 <CardDescription className="text-gray-400">
                   A web application designed to digitalize the medical services at ESI-SBA, streamlining patient record management, minimizing human errors, ensuring data confidentiality through secure access control, and providing healthcare professionals with fast, reliable access to medical information.
@@ -286,7 +286,7 @@ export default function SpacePortfolio() {
                   <img src="/7arfa_logo.jpg" alt="7arfa Logo" className="w-full h-full object-contain rounded" />
                 </div>
                 <CardTitle className="text-xl text-white group-hover:text-purple-400 transition-colors">
-                  7arfa Mobile App
+                  7arfa
                 </CardTitle>
                 <CardDescription className="text-gray-400">
                   A mobile application that connects users with local craftsmen, making it easier to find nearby professionals for repairs, construction, and maintenance services.
