@@ -582,7 +582,7 @@ export default function SpacePortfolio() {
                 </a>
               </Button>
             </div>
-            {/* Understanding Cloud Computing */}
+            {/* Understanding Artificial Intelligence */}
             <div className="bg-gray-900/50 p-6 rounded-lg shadow">
               <h3 className="text-xl font-semibold text-cyan-400 mb-2">Understanding Cloud Computing</h3>
               <p className="text-gray-300 mb-2">DataCamp &mdash; Statement of Accomplishment</p>
@@ -594,6 +594,25 @@ export default function SpacePortfolio() {
               >
                 <a
                   href="https://drive.google.com/file/d/1dz7pyD28a0Pbf7_qM35KIgfGwM2MIXPy/view?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  View Statement
+                </a>
+              </Button>
+            </div>
+            <div className="bg-gray-900/50 p-6 rounded-lg shadow">
+              <h3 className="text-xl font-semibold text-cyan-400 mb-2">Understanding Artificial Intelligence</h3>
+              <p className="text-gray-300 mb-2">DataCamp &mdash; Statement of Accomplishment</p>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10 mt-4"
+                asChild
+              >
+                <a
+                  href="https://drive.google.com/file/d/1hcobIPTVrkYYjBACEmToSWkAhweC3rox/view?usp=sharing "
                   target="_blank"
                   rel="noopener noreferrer"
                 >
