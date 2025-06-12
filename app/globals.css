@@ -28,15 +28,17 @@ h6 {
   width: 1px;
   height: 1px;
   background: transparent;
-  box-shadow:
-    1541px 1046px #fff, 1651px 1164px #fff, 906px 1046px #fff, 1777px 1331px #fff,
-    1529px 1287px #fff, 1299px 1275px #fff, 1696px 1228px #fff, 1732px 1364px #fff,
-    1850px 1464px #fff, 1260px 1464px #fff, 1580px 1183px #fff, 1414px 1108px #fff,
-    1732px 1108px #fff, 1299px 1108px #fff, 1850px 1108px #fff, 1414px 1331px #fff,
-    1732px 1331px #fff, 1299px 1331px #fff, 1850px 1331px #fff, 1414px 1554px #fff,
-    1732px 1554px #fff, 1299px 1554px #fff, 1850px 1554px #fff, 1414px 1777px #fff,
-    1732px 1777px #fff, 1299px 1777px #fff, 1850px 1777px #fff, 1414px 2000px #fff,
-    1732px 2000px #fff, 1299px 2000px #fff, 1850px 2000px #fff;
+  box-shadow: 1541px 1046px #fff, 1651px 1164px #fff, 906px 1046px #fff,
+    1777px 1331px #fff, 1529px 1287px #fff, 1299px 1275px #fff,
+    1696px 1228px #fff, 1732px 1364px #fff, 1850px 1464px #fff,
+    1260px 1464px #fff, 1580px 1183px #fff, 1414px 1108px #fff,
+    1732px 1108px #fff, 1299px 1108px #fff, 1850px 1108px #fff,
+    1414px 1331px #fff, 1732px 1331px #fff, 1299px 1331px #fff,
+    1850px 1331px #fff, 1414px 1554px #fff, 1732px 1554px #fff,
+    1299px 1554px #fff, 1850px 1554px #fff, 1414px 1777px #fff,
+    1732px 1777px #fff, 1299px 1777px #fff, 1850px 1777px #fff,
+    1414px 2000px #fff, 1732px 2000px #fff, 1299px 2000px #fff,
+    1850px 2000px #fff;
   animation: animStar 50s linear infinite;
 }
 
@@ -47,23 +49,24 @@ h6 {
   width: 1px;
   height: 1px;
   background: transparent;
-  box-shadow:
-    1541px 1046px #fff, 1651px 1164px #fff, 906px 1046px #fff, 1777px 1331px #fff,
-    1529px 1287px #fff, 1299px 1275px #fff, 1696px 1228px #fff, 1732px 1364px #fff,
-    1850px 1464px #fff, 1260px 1464px #fff, 1580px 1183px #fff, 1414px 1108px #fff,
-    1732px 1108px #fff, 1299px 1108px #fff, 1850px 1108px #fff, 1414px 1331px #fff,
-    1732px 1331px #fff, 1299px 1331px #fff, 1850px 1331px #fff, 1414px 1554px #fff,
-    1732px 1554px #fff, 1299px 1554px #fff, 1850px 1554px #fff, 1414px 1777px #fff,
-    1732px 1777px #fff, 1299px 1777px #fff, 1850px 1777px #fff, 1414px 2000px #fff,
-    1732px 2000px #fff, 1299px 2000px #fff, 1850px 2000px #fff;
+  box-shadow: 1541px 1046px #fff, 1651px 1164px #fff, 906px 1046px #fff,
+    1777px 1331px #fff, 1529px 1287px #fff, 1299px 1275px #fff,
+    1696px 1228px #fff, 1732px 1364px #fff, 1850px 1464px #fff,
+    1260px 1464px #fff, 1580px 1183px #fff, 1414px 1108px #fff,
+    1732px 1108px #fff, 1299px 1108px #fff, 1850px 1108px #fff,
+    1414px 1331px #fff, 1732px 1331px #fff, 1299px 1331px #fff,
+    1850px 1331px #fff, 1414px 1554px #fff, 1732px 1554px #fff,
+    1299px 1554px #fff, 1850px 1554px #fff, 1414px 1777px #fff,
+    1732px 1777px #fff, 1299px 1777px #fff, 1850px 1777px #fff,
+    1414px 2000px #fff, 1732px 2000px #fff, 1299px 2000px #fff,
+    1850px 2000px #fff;
 }
 
 .stars2 {
   width: 2px;
   height: 2px;
   background: transparent;
-  box-shadow:
-    700px 300px #06b6d4, 1200px 600px #8b5cf6, 1800px 200px #ec4899,
+  box-shadow: 700px 300px #06b6d4, 1200px 600px #8b5cf6, 1800px 200px #ec4899,
     300px 800px #06b6d4, 1600px 1000px #8b5cf6, 800px 1200px #ec4899,
     1400px 400px #06b6d4, 500px 1400px #8b5cf6, 1000px 100px #ec4899,
     1700px 800px #06b6d4, 200px 1000px #8b5cf6, 1500px 1300px #ec4899;
@@ -77,8 +80,7 @@ h6 {
   width: 2px;
   height: 2px;
   background: transparent;
-  box-shadow:
-    700px 300px #06b6d4, 1200px 600px #8b5cf6, 1800px 200px #ec4899,
+  box-shadow: 700px 300px #06b6d4, 1200px 600px #8b5cf6, 1800px 200px #ec4899,
     300px 800px #06b6d4, 1600px 1000px #8b5cf6, 800px 1200px #ec4899,
     1400px 400px #06b6d4, 500px 1400px #8b5cf6, 1000px 100px #ec4899,
     1700px 800px #06b6d4, 200px 1000px #8b5cf6, 1500px 1300px #ec4899;
@@ -88,8 +90,8 @@ h6 {
   width: 3px;
   height: 3px;
   background: transparent;
-  box-shadow: 1000px 400px #06b6d4, 1500px 800px #8b5cf6, 500px 1200px #ec4899, 1800px 600px #06b6d4, 300px 1000px
-    #8b5cf6, 1200px 200px #ec4899;
+  box-shadow: 1000px 400px #06b6d4, 1500px 800px #8b5cf6, 500px 1200px #ec4899,
+    1800px 600px #06b6d4, 300px 1000px #8b5cf6, 1200px 200px #ec4899;
   animation: animStar 150s linear infinite;
 }
 
@@ -100,8 +102,8 @@ h6 {
   width: 3px;
   height: 3px;
   background: transparent;
-  box-shadow: 1000px 400px #06b6d4, 1500px 800px #8b5cf6, 500px 1200px #ec4899, 1800px 600px #06b6d4, 300px 1000px
-    #8b5cf6, 1200px 200px #ec4899;
+  box-shadow: 1000px 400px #06b6d4, 1500px 800px #8b5cf6, 500px 1200px #ec4899,
+    1800px 600px #06b6d4, 300px 1000px #8b5cf6, 1200px 200px #ec4899;
 }
 
 @keyframes animStar {
@@ -176,4 +178,17 @@ html {
   .stars3 {
     animation-duration: 30s;
   }
+}
+
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.before\:animate-spin-slow::before {
+  animation: spin-slow 4s linear infinite;
+  z-index: 0;
 }

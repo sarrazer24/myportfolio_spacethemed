@@ -2,17 +2,14 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Orbitron, Exo_2 } from "next/font/google"
 import "./globals.css"
-import Head from "next/head"
 
 const orbitron = Orbitron({
   subsets: ["latin"],
-  weight: ["400", "700", "900"],
   variable: "--font-orbitron",
 })
 
 const exo2 = Exo_2({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-exo2",
 })
 
@@ -50,13 +47,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${orbitron.variable} ${exo2.variable}`}>
-      <Head>
-        <meta property="og:image" content="https://sarra-zerguerras-portfolio-space-themed.onrender.com/og-preview.jpg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta name="twitter:image" content="https://sarra-zerguerras-portfolio-space-themed.onrender.com/og-preview.jpg" />
-      </Head>
+    <html lang="en" className={`dark ${orbitron.variable} ${exo2.variable}`}>
       <body className="font-exo2">{children}</body>
     </html>
   )

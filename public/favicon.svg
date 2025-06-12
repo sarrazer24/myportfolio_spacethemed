@@ -1,0 +1,12 @@
+<!-- filepath: c:\Users\dell\Documents\space-portfolio\public\favicon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="50%" stop-color="#a21caf"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="black"/>
+  <text x="50%" y="58%" text-anchor="middle" font-size="38" font-family="Orbitron, Exo 2, Arial, sans-serif" font-weight="bold" fill="url(#g)">SZ</text>
+</svg>
