@@ -21,12 +21,14 @@ export default function ProjectsSection() {
           {/* Bloom Care Backend */}
           <Card className="group bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:border-cyan-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20">
             <CardHeader>
-              <div className="w-24 h-24 rounded-xl mb-4 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
-                <img src="/Bloom_&_Care_logo.png" alt="Bloom & Care Logo" className="w-full h-full object-cover rounded-xl" />
+              <div className="flex items-center gap-4 mb-2">
+                <div className="w-20 h-20 rounded-xl flex-shrink-0 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
+                  <img src="/Bloom_&_Care_logo.png" alt="Bloom & Care Logo" className="w-full h-full object-cover rounded-xl" />
+                </div>
+                <CardTitle className="text-xl text-white group-hover:text-cyan-400 transition-colors">
+                  Bloom & Care
+                </CardTitle>
               </div>
-              <CardTitle className="text-xl text-white group-hover:text-cyan-400 transition-colors">
-                Bloom & Care 
-              </CardTitle>
               <CardDescription className="text-gray-400">
                 A complete digital solution for managing daycare operations: child registration, attendance tracking, activity and meal planning, and parent communication — all aimed at improving daily organization and ensuring children's well-being.
               </CardDescription>
@@ -56,12 +58,14 @@ export default function ProjectsSection() {
           {/* Happy Birthday Asmae */}
           <Card className="group bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:border-pink-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/20">
             <CardHeader>
-              <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-pink-200 to-pink-300 p-3 mb-4 flex items-center justify-center group-hover:animate-pulse text-6xl">
-                🎂
+              <div className="flex items-center gap-4 mb-2">
+                <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-pink-200 to-pink-300 flex-shrink-0 p-3 flex items-center justify-center group-hover:animate-pulse text-5xl">
+                  🎂
+                </div>
+                <CardTitle className="text-xl text-white group-hover:text-pink-400 transition-colors">
+                  Happy Birthday Gift
+                </CardTitle>
               </div>
-              <CardTitle className="text-xl text-white group-hover:text-pink-400 transition-colors">
-                Happy Birthday Gift
-              </CardTitle>
               <CardDescription className="text-gray-400">
                 A fun and interactive birthday greeting web app.
               </CardDescription>
@@ -99,12 +103,14 @@ export default function ProjectsSection() {
           {/* Educare Team Projects */}
           <Card className="group bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:border-purple-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
             <CardHeader>
-              <div className="w-24 h-24 rounded-xl mb-4 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
-                <img src="/educare_logo.jpg" alt="Educare Logo" className="w-full h-full object-cover rounded-xl" />
+              <div className="flex items-center gap-4 mb-2">
+                <div className="w-20 h-20 rounded-xl flex-shrink-0 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
+                  <img src="/educare_logo.jpg" alt="Educare Logo" className="w-full h-full object-cover rounded-xl" />
+                </div>
+                <CardTitle className="text-xl text-white group-hover:text-purple-400 transition-colors">
+                  Educare
+                </CardTitle>
               </div>
-              <CardTitle className="text-xl text-white group-hover:text-purple-400 transition-colors">
-                Educare
-              </CardTitle>
               <CardDescription className="text-gray-400">
                 A web application designed to digitalize the medical services at ESI-SBA, streamlining patient record management, minimizing human errors, ensuring data confidentiality through secure access control, and providing healthcare professionals with fast, reliable access to medical information.
               </CardDescription>
@@ -135,12 +141,14 @@ export default function ProjectsSection() {
           {/* 7arfa Mobile App */}
           <Card className="group bg-gray-900/50 border-gray-700/50 backdrop-blur-sm hover:border-purple-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
             <CardHeader>
-              <div className="w-24 h-24 rounded-xl bg-white p-2 mb-4 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
-                <img src="/7arfa_logo.jpg" alt="7arfa Logo" className="w-full h-full object-contain rounded" />
+              <div className="flex items-center gap-4 mb-2">
+                <div className="w-20 h-20 rounded-xl bg-white p-2 flex-shrink-0 flex items-center justify-center overflow-hidden group-hover:animate-pulse">
+                  <img src="/7arfa_logo.jpg" alt="7arfa Logo" className="w-full h-full object-contain rounded" />
+                </div>
+                <CardTitle className="text-xl text-white group-hover:text-purple-400 transition-colors">
+                  7arfa
+                </CardTitle>
               </div>
-              <CardTitle className="text-xl text-white group-hover:text-purple-400 transition-colors">
-                7arfa
-              </CardTitle>
               <CardDescription className="text-gray-400">
                 A mobile application that connects users with local craftsmen, making it easier to find nearby professionals for repairs, construction, and maintenance services.
               </CardDescription>
