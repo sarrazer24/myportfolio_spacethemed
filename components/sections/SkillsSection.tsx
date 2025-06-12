@@ -56,7 +56,7 @@ const skills = [
   { name: "Pandas" },
   { name: "Figma" },
   { name: "Canva" },
-  { name: "Dribbble" },
+  { name: "dribbble" },
   { name: "Notion" },
   { name: "GitHub" },
   { name: "Git" },
