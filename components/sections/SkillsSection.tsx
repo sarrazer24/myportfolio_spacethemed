@@ -18,6 +18,9 @@ const SvgIcon = ({ name, className, size = 64 }: SvgIconProps) => (
     height={size}
     style={{ objectFit: 'contain', display: 'inline-block' }}
     loading="lazy"
+    onError={(e) => {
+      (e.currentTarget as HTMLImageElement).src = "/svg/fallback.svg";
+    }}
   />
 );
 
