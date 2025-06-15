@@ -53,11 +53,12 @@ export default function HeroSection({ scrollToSection }: { scrollToSection: (id:
               className="border-cyan-400 text-cyan-400 hover:bg-cyan-500/10 hover:text-white px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300"
             >
               <a
-                href="/Sarra_Zerguerras_Resume.pdf"
+                href="/KhayraSarraZerguerrasCV.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="text-cyan-400 hover:underline"
               >
-                View My Resume
+                Download CV
               </a>
             </Button>
           </div>
