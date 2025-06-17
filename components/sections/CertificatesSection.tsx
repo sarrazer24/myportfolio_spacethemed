@@ -55,6 +55,12 @@ const achievements = [
     issuer: "DataCamp",
     date: "2025",
     link: "https://drive.google.com/file/d/1dDqAV4lPh1PSx7uGtpK2WOYHYDubWN66/view?usp=sharing"
+  },
+  {
+    title: "Understanding Machine Learning",
+    issuer: "DataCamp",
+    date: "2025",
+    link: "https://drive.google.com/file/d/1YehdBkgY34x-SLVCaEdgww2keRdYzMuB/view?usp=sharing"
   }
 ]
 
