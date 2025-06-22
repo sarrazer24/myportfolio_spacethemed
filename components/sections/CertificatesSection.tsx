@@ -34,6 +34,12 @@ const achievements = [
 		link: "https://drive.google.com/file/d/1dz7pyD28a0Pbf7_qM35KIgfGwM2MIXPy/view?usp=sharing",
 	},
 	{
+		title: "AI Ethics",
+		issuer: "DataCamp",
+		date: "2025",
+		link: "https://drive.google.com/file/d/1I_ndf2y9wREFyt4__DRLGigqqcdV-yWO/view?usp=sharing",
+	},
+	{
 		title: "Artificial Intelligence",
 		issuer: "DataCamp",
 		date: "2025",
@@ -44,6 +50,18 @@ const achievements = [
 		issuer: "DataCamp",
 		date: "2025",
 		link: "https://drive.google.com/file/d/1rKF9StzmudbVVrTgJ1_2_isZVflLYsln/view?usp=sharing",
+	},
+	{
+		title: "Large Language Models (LLMs) Concepts",
+		issuer: "DataCamp",
+		date: "2025",
+		link: "https://drive.google.com/file/d/12ZUc3AxCgFy6kkgJ2gbSZgUx8-otkK4Q/view?usp=sharing",
+	},
+	{
+		title: "Generative AI Concepts",
+		issuer: "DataCamp",
+		date: "2025",
+		link: "https://drive.google.com/file/d/1vetc0nFj58fOzMK2p_4sHAIglmk_4koU/view?usp=sharing",
 	},
 	{
 		title: "Cleaning Data with Generative AI",
@@ -72,7 +90,12 @@ const sortedAchievements = [...achievements].sort((a, b) => {
 })
 
 const certificates: typeof achievements = [
-	// No official certificates yet
+	{
+		title: "AI Fundamentals",
+		issuer: "DataCamp",
+		date: "2025",
+		link: "https://drive.google.com/file/d/1t15qFlGGlPoo1alCxmiuSqAw678sVegd/view?usp=sharing",
+	},
 ]
 
 const participation: typeof achievements = [
@@ -216,7 +239,7 @@ export default function CertificatesSection() {
 							)}
 						</div>
 						{/* More/Less Button */}
-						{isAchievements && currentSection.data.length > 8 && (
+						{isAchievements && currentSection.data.length > 4 && (
 							<div className="flex justify-center mt-6">
 								<Button
 									variant="outline"
