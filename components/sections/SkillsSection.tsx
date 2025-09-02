@@ -71,6 +71,7 @@ const row2Skills = skills.slice(midpoint);
 export default function SkillsSection() {
   return (
     <section
+      id="skills"
       className={`${styles.appContainer} px-4 md:px-12 lg:px-24 xl:px-32 py-16`}
       style={{ boxSizing: "border-box" }}
     >
