@@ -65,7 +65,7 @@ const skills = [
 
 // Split skills into two roughly equal rows for desktop
 const midpoint = Math.ceil(skills.length / 2);
-const row1Skills = skills.slice(0, midpoint);
+const row1Skills = skills.slice(0, midpoint);7
 const row2Skills = skills.slice(midpoint);
 
 export default function SkillsSection() {

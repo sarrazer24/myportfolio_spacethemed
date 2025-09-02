@@ -76,6 +76,12 @@ const achievements = [
 		link: "https://drive.google.com/file/d/1YehdBkgY34x-SLVCaEdgww2keRdYzMuB/view?usp=sharing",
 	},
 	{
+		title: "Intermediate Python",
+		issuer: "DataCamp",
+		date: "2025",
+		link: "https://drive.google.com/file/d/1sSzv5XewOBeai1esQv5r3ckGrwRyP3w5/view?usp=sharing",
+	},
+	{
 		title: "Introduction to Python",
 		issuer: "DataCamp",
 		date: "2024",
