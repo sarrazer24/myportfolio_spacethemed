@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: myportfolio
-    env: node
-    buildCommand: pnpm install && pnpm build
-    startCommand: pnpm start
-    runtime: node
-    region: oregon
-    branch: main
