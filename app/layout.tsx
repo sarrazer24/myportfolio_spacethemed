@@ -20,11 +20,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Sarra Zerguerras - Portfolio",
     description: "Computer Science Student Portfolio - Exploring the cosmos of code and innovation",
-    url: "https://sarra-zerguerras-portfolio-space-themed.onrender.com/",
+    url: "https://sarra-zerguerras-portfolio.vercel.app",
     siteName: "Sarra Zerguerras Portfolio",
     images: [
       {
-        url: "https://sarra-zerguerras-portfolio-space-themed.onrender.com/og-preview.jpg",
+        url: "https://sarra-zerguerras-portfolio.vercel.app/og-preview.jpg",
         width: 1200,
         height: 630,
         alt: "Preview of Sarra Zerguerras Portfolio website",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Sarra Zerguerras - Portfolio",
     description: "Computer Science Student Portfolio - Exploring the cosmos of code and innovation",
-    images: ["https://sarra-zerguerras-portfolio-space-themed.onrender.com/og-preview.jpg"],
+    images: ["https://sarra-zerguerras-portfolio.vercel.app/og-preview.jpg"],
   },
 }
 
