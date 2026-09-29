@@ -1,6 +1,8 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Orbitron, Exo_2 } from "next/font/google"
+// Next.js bundles this stylesheet, but TypeScript may not have a declaration for CSS imports.
+// @ts-expect-error CSS is handled by Next.js at build time.
 import "./globals.css"
 
 const orbitron = Orbitron({

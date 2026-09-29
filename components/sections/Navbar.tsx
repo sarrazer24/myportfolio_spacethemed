@@ -4,20 +4,28 @@ import { X } from "lucide-react";
 import { Sheet, SheetTrigger, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { CiMenuFries } from "react-icons/ci";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter, usePathname } from "next/navigation"
 
-const navItems = [
+type NavItem = { label: string; id?: string; href?: string }
+
+const navItems: NavItem[] = [
   { label: "Home", id: "home" },
   { label: "Projects", id: "projects" },
   { label: "Skills", id: "skills" },
   { label: "Certificates", id: "certificates" },
+  { label: "Journal", href: "/journal" },
   { label: "Contact", id: "contact" },
 ];
 
-export default function Navbar({ scrollToSection }: { scrollToSection: (id: string) => void }) {
+export default function Navbar({ scrollToSection }: { scrollToSection?: (id: string) => void }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
-  const handleNavClick = (id: string) => {
-    scrollToSection(id);
+  const handleNavClick = (item: NavItem) => {
+    if (item.href) router.push(item.href);
+    else if (scrollToSection && pathname === "/") scrollToSection(item.id!);
+    else router.push(`/#${item.id}`);
     setMenuOpen(false);
   };
 
@@ -26,7 +34,7 @@ export default function Navbar({ scrollToSection }: { scrollToSection: (id: stri
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <div
           className="text-2xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent select-none cursor-pointer tracking-wide drop-shadow-lg"
-          onClick={() => handleNavClick("home")}
+          onClick={() => handleNavClick(navItems[0])}
         >
           Sarra Zerguerras
         </div>
@@ -34,8 +42,8 @@ export default function Navbar({ scrollToSection }: { scrollToSection: (id: stri
         <div className="hidden md:flex space-x-8">
           {navItems.map((item) => (
             <button
-              key={item.id}
-              onClick={() => handleNavClick(item.id)}
+              key={item.label}
+              onClick={() => handleNavClick(item)}
               className="relative group text-gray-200 hover:text-cyan-400 transition-all duration-300 font-semibold tracking-wide"
             >
               {item.label}
@@ -78,8 +86,8 @@ export default function Navbar({ scrollToSection }: { scrollToSection: (id: stri
                       <nav className="flex flex-col items-center justify-center gap-12 flex-1">
                         {navItems.map((item) => (
                           <button
-                            key={item.id}
-                            onClick={() => handleNavClick(item.id)}
+                            key={item.label}
+                            onClick={() => handleNavClick(item)}
                             className="text-2xl font-bold text-gray-100 hover:text-cyan-400 transition-all tracking-wider"
                             style={{ letterSpacing: "0.04em" }}
                           >
