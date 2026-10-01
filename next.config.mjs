@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
+  allowedDevOrigins: ["10.2.0.2"],
   eslint: {
     ignoreDuringBuilds: true,
   },

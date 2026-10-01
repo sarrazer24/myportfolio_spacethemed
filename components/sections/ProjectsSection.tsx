@@ -27,7 +27,7 @@ const projects = [
     subtitle: "AI-Powered Sign Language Production",
     description:
       "A research-oriented AI system that transforms text into 3D sign-language motion sequences. The project combines NLP, diffusion models, cross-attention, and pose-based generation, with a Flutter application for interaction.",
-    image: "/gensign_logo.png",
+    image: null,
     icon: Brain,
     accent: "cyan",
     featured: true,
@@ -47,7 +47,7 @@ const projects = [
     subtitle: "AI-Powered Note Generation",
     description:
       "An intelligent application that uses AI to transform educational content into structured notes, helping students extract and organize important information more efficiently.",
-    image: "/smart_notes_logo.png",
+    image: null,
     icon: Sparkles,
     accent: "purple",
     featured: true,
@@ -66,7 +66,7 @@ const projects = [
     subtitle: "Computer Vision",
     description:
       "An AI-based image colorization project exploring computer vision techniques to transform grayscale images into colorized images using deep learning.",
-    image: "/ai_colorization_logo.png",
+    image: null,
     icon: Brain,
     accent: "pink",
     featured: true,
@@ -84,7 +84,7 @@ const projects = [
     subtitle: "AI-Powered Reading Platform",
     description:
       "An AI-powered reading platform designed to help users discover, understand, and retain books through intelligent summaries, quizzes, and personalized learning features.",
-    image: "/lektura_logo.png",
+    image: null,
     icon: Database,
     accent: "cyan",
     featured: true,
@@ -103,7 +103,7 @@ const projects = [
     subtitle: "Data Science & Simulation",
     description:
       "A counterfactual Formula 1 simulator exploring hypothetical race scenarios using historical racing data, statistical analysis, and interactive visualizations.",
-    image: "/f1_logo.png",
+    image: null,
     icon: Database,
     accent: "purple",
     featured: true,
