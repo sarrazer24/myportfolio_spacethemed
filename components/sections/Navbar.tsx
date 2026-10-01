@@ -10,10 +10,12 @@ type NavItem = { label: string; id?: string; href?: string }
 
 const navItems: NavItem[] = [
   { label: "Home", id: "home" },
+  { label: "About", id: "about" },
+  { label: "Research", id: "research" },
   { label: "Projects", id: "projects" },
+  { label: "Research Log", id: "research-log" },
   { label: "Skills", id: "skills" },
-  { label: "Certificates", id: "certificates" },
-  { label: "Journal", href: "/journal" },
+  { label: "Experience", id: "experience" },
   { label: "Contact", id: "contact" },
 ];
 

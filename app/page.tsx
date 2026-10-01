@@ -1,25 +1,18 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import HeroSection from "@/components/sections/HeroSection"
+import AboutSection from "@/components/sections/AboutSection"
+import ResearchInterestsSection from "@/components/sections/ResearchInterestsSection"
 import ProjectsSection from "@/components/sections/ProjectsSection"
+import ResearchLogSection from "@/components/sections/ResearchLogSection"
 import SkillsSection from "@/components/sections/SkillsSection"
 import CertificatesSection from "@/components/sections/CertificatesSection"
+import ExperienceSection from "@/components/sections/ExperienceSection"
 import ContactSection from "@/components/sections/ContactSection"
 import FooterSection from "@/components/sections/FooterSection"
 import Navbar from "@/components/sections/Navbar"
 
 export default function SpacePortfolio() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
-    }
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
-
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" })
   }
@@ -36,9 +29,13 @@ export default function SpacePortfolio() {
         bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-pink-900/20"></div>
       <Navbar scrollToSection={scrollToSection} />
       <HeroSection scrollToSection={scrollToSection} />
+      <AboutSection />
+      <ResearchInterestsSection />
       <ProjectsSection />
+      <ResearchLogSection />
       <SkillsSection />
       <CertificatesSection />
+      <ExperienceSection />
       <ContactSection />
       <FooterSection />
     </div>

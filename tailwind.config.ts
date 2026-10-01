@@ -53,7 +53,6 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Space theme colors
         space: {
           cyan: "#06b6d4",
           purple: "#8b5cf6",
