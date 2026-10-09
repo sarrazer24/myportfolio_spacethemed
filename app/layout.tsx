@@ -1,8 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Orbitron, Exo_2 } from "next/font/google"
-// Next.js bundles this stylesheet, but TypeScript may not have a declaration for CSS imports.
-// @ts-expect-error CSS is handled by Next.js at build time.
 import "./globals.css"
 
 const orbitron = Orbitron({
@@ -16,12 +14,12 @@ const exo2 = Exo_2({
 })
 
 export const metadata: Metadata = {
-  title: "Sarra Zerguerras - Portfolio",
-  description: "Computer Science Student Portfolio - Exploring the cosmos of code and innovation",
+  title: "Khayra Sarra Zerguerras - AI & Data Science Portfolio",
+  description: "Portfolio of Khayra Sarra Zerguerras, an AI and Data Science engineering student exploring cybersecurity, LLMs, NLP, and AI safety.",
   generator: 'sarra portfolio',
   openGraph: {
-    title: "Sarra Zerguerras - Portfolio",
-    description: "Computer Science Student Portfolio - Exploring the cosmos of code and innovation",
+    title: "Khayra Sarra Zerguerras - AI & Data Science Portfolio",
+    description: "Portfolio of Khayra Sarra Zerguerras, an AI and Data Science engineering student exploring cybersecurity, LLMs, NLP, and AI safety.",
     url: "https://sarra-zerguerras-portfolio.vercel.app",
     siteName: "Sarra Zerguerras Portfolio",
     images: [
@@ -37,8 +35,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sarra Zerguerras - Portfolio",
-    description: "Computer Science Student Portfolio - Exploring the cosmos of code and innovation",
+    title: "Khayra Sarra Zerguerras - AI & Data Science Portfolio",
+    description: "Portfolio of Khayra Sarra Zerguerras, an AI and Data Science engineering student exploring cybersecurity, LLMs, NLP, and AI safety.",
     images: ["https://sarra-zerguerras-portfolio.vercel.app/og-preview.jpg"],
   },
 }
@@ -49,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`dark ${orbitron.variable} ${exo2.variable}`}>
+    <html lang="en" className={`${orbitron.variable} ${exo2.variable}`}>
       <body className="font-exo2">{children}</body>
     </html>
   )

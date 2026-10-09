@@ -1,0 +1,136 @@
+---
+title: "The Average of Two Signs Is Not a Sign: Building a Text-to-ASL Generator with Diffusion Models"
+subtitle: "What a failed regression baseline taught me while building GenSign, our fourth-year project"
+description: "How we built GenSign, an AI that turns text into American Sign Language video, and why averaging breaks sign language generation."
+date: "2026-07-09"
+slug: "text-to-asl-generation-diffusion-models"
+tags:
+  - sign language generation
+  - ASL
+  - text-to-ASL
+  - diffusion models
+  - How2Sign
+  - ControlNet
+  - final year project
+cover: "/images/blog/the-average-of-two-signs-is-not-a-sign/fig8_2_end_to_end.png"
+---
+
+For our fourth-year project at ESI Sidi-Bel-Abbès, I worked with four friends on GenSign. You type or speak a sentence, and it produces a video of a virtual person signing it in American Sign Language.
+
+When we started, I assumed the hard part would be making the video look good. It wasn't. The part that taught me the most came earlier and sounded much simpler: **how should a model output the motion?**
+
+## The setup: a skeleton in the middle
+
+We didn't go straight from text to video. The pipeline has two phases, with a skeleton between them:
+
+**text → sequence of pose keypoints → video**
+
+<figure>
+  <img
+    src="/images/blog/the-average-of-two-signs-is-not-a-sign/fig4_1_pipeline.png"
+    alt="GenSign pipeline: optional audio goes through Whisper speech recognition to text, a text-to-pose model produces pose coordinates, which are grouped into frames and turned into video by a pose-to-video model."
+  />
+  <figcaption>
+    The GenSign pipeline. Dashed boxes are optional (speech input).
+  </figcaption>
+</figure>
+
+A "pose" is a set of tracked points for each frame: 25 for the body, 21 per hand, and 84 for the face. Hands and face matter because ASL is far more than arm movement. Handshapes and facial expressions carry grammar.
+
+<figure>
+  <img
+    src="/images/blog/the-average-of-two-signs-is-not-a-sign/fig3_1_keypoints.png"
+    alt="Real How2Sign video frames of a signer, with the extracted skeleton keypoints for body, hands and face shown below each frame."
+  />
+  <figcaption>A How2Sign frame and its extracted keypoints.</figcaption>
+</figure>
+
+We trained on How2Sign, a large ASL dataset, using the pose version the SignDiff authors had already extracted. So we never ran pose estimation ourselves. With two Tesla T4 GPUs, we also trained on only about 8,000 segments instead of the full training set.
+
+The split into stages was mostly practical. We could train and test each part separately, which helped a lot when something broke.
+
+## The baseline that looked fine until it didn't
+
+Our first attempt at text-to-pose was the obvious one. A T5 encoder reads the sentence, a decoder predicts the pose frames, and we train with mean squared error. It was fast and easy to set up.
+
+The outputs looked reasonable at first. Arms and torso moved smoothly. Then I looked at the hands, and they had collapsed into a vague, average-looking shape. Fingerspelling was unreadable.
+
+It took me a while to see why. The same sentence can be signed in several valid ways, with different speeds or handshape choices. MSE rewards the model for predicting the _average_ of all of them, and the average of two valid signs isn't a valid sign. It's like blending two photos of different faces and expecting to get a third person.
+
+## Letting the model pick one
+
+Diffusion avoids this. Instead of predicting one output directly, the model starts from random noise and removes it step by step, guided by the text. In rough pseudocode:
+
+```python
+x = random_noise(T, num_joints * 3)
+for t in reversed(range(20)):      # 20 DDIM steps
+    x = denoise(x, t, text_embedding)
+```
+
+Every run commits to one plausible sequence instead of hedging across all of them.
+
+<figure>
+  <img
+    src="/images/blog/the-average-of-two-signs-is-not-a-sign/fig8_1_denoising.png"
+    alt="Four stages of Approach B denoising: Gaussian noise at t=20, torso initialization at t=15, macro-limb tracking at t=10, and a resolved 178-joint pose at t=0."
+  />
+  <figcaption>
+    Approach B denoising, from pure noise at t=20 to a resolved pose at t=0.
+  </figcaption>
+</figure>
+
+Our best model, which we called Approach B, uses a 1D U-Net over the time axis with cross-attention to a LoRA-tuned T5 encoder. It also adds a contrastive loss (InfoNCE) that pulls text and motion embeddings together, at the body level and at the hand level.
+
+We compared it with a second diffusion variant (Approach C), and the numbers on the How2Sign test set looked like this. For MPJPE and DTW, lower is better; for BLEU-4, higher is better.
+
+<figure>
+  <img
+    src="/images/blog/the-average-of-two-signs-is-not-a-sign/table8_1_results.png"
+    alt="Results table. Approach A (T5 regression baseline): MPJPE 0.184, DTW 1.104, BLEU-4 0.000. Approach B (dual contrastive diffusion): MPJPE 0.091, DTW 0.521, BLEU-4 0.142. Approach C (UNet1D posture diffuser): MPJPE 0.104, DTW 0.702, BLEU-4 0.015."
+  />
+  <figcaption>Phase 1 results on the How2Sign test set.</figcaption>
+</figure>
+
+Joint error roughly halved from A to B. I'd be careful with the BLEU-4 column, though. We computed it on pose tokens from a simple k-means codebook, and the near-zero scores for A and C are partly an artifact of that choice.
+
+C also had its own problem. Its outputs were stable but looked very similar across different sentences, as if it were partly ignoring the text. We think the missing classifier-free guidance is the cause, but we didn't test that.
+
+## From skeleton to video
+
+Phase 2 renders the poses into frames using Stable Diffusion 1.5 with a ControlNet adapter, then upscales them to 768×768.
+
+<figure>
+  <img
+    src="/images/blog/the-average-of-two-signs-is-not-a-sign/fig8_2_end_to_end.png"
+    alt="Flow diagram: the input sentence 'Be careful over there!' becomes a sequence of generated skeleton poses, which become a final 768 by 768 frame of a virtual signer."
+  />
+  <figcaption>
+    From the sentence "Be careful over there!" to a generated signing frame.
+  </figcaption>
+</figure>
+
+We also got the whole pipeline running offline on a phone. LCM-LoRA cut denoising from 20 steps to 4, and with INT8 quantization we reached 12.8 seconds end to end for a 50-word input on a Pixel 6.
+
+## Where it falls short
+
+I want to be straight about this. We never ran a study with deaf or hard-of-hearing signers. We judged quality ourselves against reference videos. The output has flicker, a greenish tint, and clothing and faces that drift over longer clips. Our FVD was 384.2, worse than the baseline we compared against, partly because we had to switch off the temporal layers to fit in GPU memory.
+
+So GenSign is a research prototype. It isn't something anyone should rely on to communicate.
+
+## What stuck with me
+
+The loss function decides what a model is allowed to be wrong about. Our baseline was good at the parts the eye notices first (arms, torso) and bad at the hands, which carry the meaning. An error metric averaged over all joints can hide that. I only understood the problem after watching the outputs, not after reading the numbers.
+
+The same thing shows up well beyond sign language, anywhere one input has many valid outputs and the training signal only knows the average.
+
+## A question I can't answer
+
+MPJPE tells you how close the joints are to a reference. It doesn't tell you whether a signer would understand the result. Without signers in the evaluation loop, how much can any of our metrics really tell us? And is a skeleton even the right middle step for a language that depends so heavily on facial grammar?
+
+---
+
+{/* Remove your own name from the list below before publishing. */}
+
+_GenSign was built with Hallalbi Nafissa, Refsi Aya Sirine, Sid Lakhdar Sara Hafeda, Zerguerras Khayra Sarra and Zoubir Hiba, and supervised by Dr. N. Dif. I'm writing about it from my own understanding, so any mistakes in this article are mine._
+
+_Code is on [GitHub](https://github.com/sarrazer24/sign-language-production), and the Approach B weights are on [Hugging Face](https://huggingface.co/tawes/SignLanguageTextToPoseModel)._

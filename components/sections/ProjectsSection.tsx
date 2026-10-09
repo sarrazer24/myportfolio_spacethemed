@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Card,
@@ -19,9 +20,24 @@ import {
   Database,
   Smartphone,
   Code2,
+  Search,
 } from "lucide-react";
+import { siteConfig } from "@/config/site";
 
-const projects = [
+type ProjectCategory = "AI" | "Web" | "Mobile"
+
+const projects: Array<{
+  title: string;
+  subtitle: string;
+  description: string;
+  image: string | null;
+  icon: typeof Brain;
+  accent: "cocoa";
+  featured: boolean;
+  category: ProjectCategory;
+  tags: string[];
+  github: string;
+}> = [
   {
     title: "GenSign",
     subtitle: "AI-Powered Sign Language Production",
@@ -29,8 +45,9 @@ const projects = [
       "A research-oriented AI system that transforms text into 3D sign-language motion sequences. The project combines NLP, diffusion models, cross-attention, and pose-based generation, with a Flutter application for interaction.",
     image: null,
     icon: Brain,
-    accent: "cyan",
+    accent: "cocoa",
     featured: true,
+    category: "AI",
     tags: [
       "Python",
       "PyTorch",
@@ -49,8 +66,9 @@ const projects = [
       "An intelligent application that uses AI to transform educational content into structured notes, helping students extract and organize important information more efficiently.",
     image: null,
     icon: Sparkles,
-    accent: "purple",
+    accent: "cocoa",
     featured: true,
+    category: "AI",
     tags: [
       "Python",
       "AI",
@@ -68,8 +86,9 @@ const projects = [
       "An AI-based image colorization project exploring computer vision techniques to transform grayscale images into colorized images using deep learning.",
     image: null,
     icon: Brain,
-    accent: "pink",
+    accent: "cocoa",
     featured: true,
+    category: "AI",
     tags: [
       "Python",
       "Computer Vision",
@@ -86,8 +105,9 @@ const projects = [
       "An AI-powered reading platform designed to help users discover, understand, and retain books through intelligent summaries, quizzes, and personalized learning features.",
     image: null,
     icon: Database,
-    accent: "cyan",
+    accent: "cocoa",
     featured: true,
+    category: "Web",
     tags: [
       "Next.js",
       "TypeScript",
@@ -105,8 +125,9 @@ const projects = [
       "A counterfactual Formula 1 simulator exploring hypothetical race scenarios using historical racing data, statistical analysis, and interactive visualizations.",
     image: null,
     icon: Database,
-    accent: "purple",
+    accent: "cocoa",
     featured: true,
+    category: "AI",
     tags: [
       "Python",
       "Data Science",
@@ -123,8 +144,9 @@ const projects = [
       "A complete digital solution for managing daycare operations, including child registration, attendance, activity and meal planning, and parent communication.",
     image: "/Bloom_&_Care_logo.png",
     icon: Code2,
-    accent: "cyan",
+    accent: "cocoa",
     featured: false,
+    category: "Web",
     tags: [
       "Spring Boot",
       "React",
@@ -140,8 +162,9 @@ const projects = [
       "A web and mobile application designed to digitalize medical services at ESI-SBA, with patient record management, secure access control, and REST APIs.",
     image: "/educare_logo.jpg",
     icon: Smartphone,
-    accent: "purple",
+    accent: "cocoa",
     featured: false,
+    category: "Mobile",
     tags: [
       "Node.js",
       "Flutter",
@@ -158,8 +181,9 @@ const projects = [
       "A mobile application connecting users with local craftsmen, making it easier to discover professionals for repairs, construction, and maintenance services.",
     image: "/7arfa_logo.jpg",
     icon: Smartphone,
-    accent: "pink",
+    accent: "cocoa",
     featured: false,
+    category: "Mobile",
     tags: [
       "Flutter",
       "Dart",
@@ -171,29 +195,24 @@ const projects = [
 ];
 
 const accentStyles = {
-  cyan: {
-    border: "hover:border-cyan-400/50",
-    title: "group-hover:text-cyan-400",
-    glow: "hover:shadow-cyan-500/10",
-    icon: "text-cyan-400",
-  },
-  purple: {
-    border: "hover:border-purple-400/50",
-    title: "group-hover:text-purple-400",
-    glow: "hover:shadow-purple-500/10",
-    icon: "text-purple-400",
-  },
-  pink: {
-    border: "hover:border-pink-400/50",
-    title: "group-hover:text-pink-400",
-    glow: "hover:shadow-pink-500/10",
-    icon: "text-pink-400",
+  cocoa: {
+    border: "hover:border-cocoa-400/50",
+    title: "group-hover:text-cocoa-400",
+    glow: "hover:shadow-cocoa-500/10",
+    icon: "text-cocoa-400",
   },
 };
 
 export default function ProjectsSection() {
-  const featuredProjects = projects.filter((project) => project.featured);
-  const otherProjects = projects.filter((project) => !project.featured);
+  const [category, setCategory] = useState<ProjectCategory | "All">("All");
+  const [query, setQuery] = useState("");
+  const visibleProjects = projects.filter((project) => {
+    const matchesCategory = category === "All" || project.category === category;
+    const searchable = [project.title, project.subtitle, project.description, project.category, ...project.tags].join(" ").toLowerCase();
+    return matchesCategory && searchable.includes(query.toLowerCase().trim());
+  });
+  const featuredProjects = visibleProjects.filter((project) => project.featured);
+  const otherProjects = visibleProjects.filter((project) => !project.featured);
 
   return (
     <motion.section
@@ -207,25 +226,42 @@ export default function ProjectsSection() {
       <div className="container mx-auto max-w-7xl">
 
         {/* Section heading */}
-        <div className="text-center mb-16">
-          <p className="text-sm uppercase tracking-[0.25em] text-cyan-400 mb-3">
+        <div className="mb-10">
+          <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.2em] text-cocoa-600">
             Selected work
           </p>
 
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold tracking-[-0.04em] text-gray-900 md:text-4xl">
             Projects
           </h2>
 
-          <p className="text-gray-400 max-w-2xl mx-auto mt-5 leading-relaxed">
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-gray-600">
             A selection of AI, data science, and software engineering projects
             where I turn ideas into working systems.
           </p>
+          <label className="mt-6 flex max-w-xl items-center gap-2 border-b border-cocoa-700/20 pb-2 text-gray-500">
+            <Search className="h-4 w-4" />
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search projects, technologies, or topics..."
+              aria-label="Search projects"
+              className="w-full bg-transparent text-sm text-gray-900 outline-none placeholder:text-gray-500 dark:text-white"
+            />
+          </label>
+          <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-b border-cocoa-700/20 pb-3">
+            {(["All", "AI", "Web", "Mobile"] as const).map((item) => (
+              <button key={item} onClick={() => setCategory(item)} className={`text-xs transition-colors ${category === item ? "font-semibold text-cocoa-700 underline underline-offset-4" : "text-gray-500 hover:text-cocoa-600"}`}>
+                {item}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Featured projects */}
         <div className="mb-16">
           <div className="flex items-center gap-3 mb-7">
-            <Sparkles className="w-5 h-5 text-cyan-400" />
+            <Sparkles className="w-5 h-5 text-cocoa-400" />
             <h3 className="text-2xl font-semibold text-gray-200">
               Featured Work
             </h3>
@@ -313,7 +349,7 @@ export default function ProjectsSection() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="border-cyan-500/40 text-cyan-400 hover:bg-cyan-500/10"
+                            className="border-cocoa-500/40 text-cocoa-400 hover:bg-cocoa-500/10"
                             asChild
                           >
                             <a
@@ -331,19 +367,11 @@ export default function ProjectsSection() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="border-purple-500/40 text-purple-400 hover:bg-purple-500/10"
+                            className="border-cocoa-500/40 text-cocoa-400 hover:bg-cocoa-500/10"
                             asChild
                           >
                             <a
-                              href="#contact"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                document
-                                  .getElementById("contact")
-                                  ?.scrollIntoView({
-                                    behavior: "smooth",
-                                  });
-                              }}
+                              href="/projects/gensign"
                             >
                               <ExternalLink className="w-4 h-4 mr-2" />
                               Case Study
@@ -357,12 +385,13 @@ export default function ProjectsSection() {
               );
             })}
           </div>
+          {featuredProjects.length === 0 && <p className="border-b border-t border-cocoa-500/25 py-8 text-gray-500">No projects match your search.</p>}
         </div>
 
         {/* Other projects */}
         <div>
           <div className="flex items-center gap-3 mb-7">
-            <Code2 className="w-5 h-5 text-purple-400" />
+            <Code2 className="w-5 h-5 text-cocoa-400" />
             <h3 className="text-2xl font-semibold text-gray-200">
               Other Projects
             </h3>
@@ -429,7 +458,7 @@ export default function ProjectsSection() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="border-gray-700 text-gray-300 hover:border-cyan-400/50 hover:text-cyan-400"
+                      className="border-gray-700 text-gray-300 hover:border-cocoa-400/50 hover:text-cocoa-400"
                       asChild
                     >
                       <a
@@ -456,11 +485,11 @@ export default function ProjectsSection() {
 
           <Button
             variant="outline"
-            className="border-cyan-500/40 text-cyan-400 hover:bg-cyan-500/10 rounded-full px-6"
+            className="border-cocoa-500/40 text-cocoa-400 hover:bg-cocoa-500/10 rounded-full px-6"
             asChild
           >
             <a
-              href="https://github.com/sarrazer24"
+              href={siteConfig.social.github}
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -28,7 +28,10 @@ const SvgIcon = ({
     }}
     loading="lazy"
     onError={(e) => {
-      (e.currentTarget as HTMLImageElement).src = "/svg/fallback.svg";
+      const image = e.currentTarget as HTMLImageElement;
+      if (image.dataset.fallback) return;
+      image.dataset.fallback = "true";
+      image.src = "/svg/fallback.svg";
     }}
   />
 );
@@ -41,6 +44,9 @@ const skillCategories = [
     skills: [
       { name: "Python" },
       { name: "Pandas" },
+      { name: "PyTorch" },
+      { name: "Transformers", label: "Hugging Face / Transformers" },
+      { name: "scikit-learn", label: "scikit-learn" },
       { name: "R" },
       { name: "PostgreSQL" },
     ],
@@ -77,7 +83,6 @@ const skillCategories = [
       { name: "Dart" },
       { name: "MySQL" },
       { name: "MongoDB" },
-      { name: "PostgreSQL" },
     ],
   },
   {
@@ -120,11 +125,11 @@ export default function SkillsSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-sm uppercase tracking-[0.25em] text-cyan-400 mb-3">
+          <p className="text-sm uppercase tracking-[0.25em] text-cocoa-400 mb-3">
             My toolkit
           </p>
 
-          <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cocoa-400 via-cocoa-400 to-cocoa-400 bg-clip-text text-transparent">
             Technical Skills
           </h2>
 
@@ -139,7 +144,7 @@ export default function SkillsSection() {
           {skillCategories.map((category, categoryIndex) => (
             <motion.div
               key={category.title}
-              className="group relative rounded-2xl border border-gray-800/80 bg-gray-950/40 backdrop-blur-sm p-6 transition-all duration-300 hover:border-cyan-400/30 hover:bg-gray-900/50 hover:-translate-y-1"
+              className="group relative rounded-2xl border border-gray-800/80 bg-gray-950/40 backdrop-blur-sm p-6 transition-all duration-300 hover:border-cocoa-400/30 hover:bg-gray-900/50 hover:-translate-y-1"
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -149,7 +154,7 @@ export default function SkillsSection() {
               }}
             >
               {/* Decorative glow */}
-              <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-cyan-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-cyan-500/10 group-hover:via-purple-500/10 group-hover:to-pink-500/10 transition-all duration-500 pointer-events-none" />
+              <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-cocoa-500/0 via-cocoa-500/0 to-cocoa-500/0 group-hover:from-cocoa-500/10 group-hover:via-cocoa-500/10 group-hover:to-cocoa-500/10 transition-all duration-500 pointer-events-none" />
 
               <div className="relative">
                 {/* Category title */}
@@ -168,7 +173,7 @@ export default function SkillsSection() {
                   {category.skills.map((skill) => (
                     <div
                       key={skill.name}
-                      className="flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-800 bg-gray-900/60 hover:border-cyan-400/30 hover:bg-gray-800/70 transition-all duration-200"
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-800 bg-gray-900/60 hover:border-cocoa-400/30 hover:bg-gray-800/70 transition-all duration-200"
                       title={skill.label || skill.name}
                     >
                       <SvgIcon
@@ -198,6 +203,9 @@ export default function SkillsSection() {
         >
           Always learning, experimenting, and adding new tools to the stack.
         </motion.p>
+        <p className="text-center text-xs text-gray-600 mt-3">
+          TODO: Verify OpenCV usage in the GitHub repositories before adding it to the toolkit.
+        </p>
       </div>
     </section>
   );

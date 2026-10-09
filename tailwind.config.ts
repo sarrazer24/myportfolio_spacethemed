@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss"
 
 const config: Config = {
-  darkMode: ["class"],
+  darkMode: "class",
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -20,6 +20,13 @@ const config: Config = {
     },
     extend: {
       colors: {
+        cocoa: {
+          300: "#d8a5ae",
+          400: "#c77f8b",
+          500: "#b96878",
+          700: "#8f4f5d",
+          900: "#5e303c",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -53,13 +60,6 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        space: {
-          cyan: "#06b6d4",
-          purple: "#8b5cf6",
-          pink: "#ec4899",
-          blue: "#3b82f6",
-          indigo: "#6366f1",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -80,8 +80,8 @@ const config: Config = {
           "50%": { transform: "translateY(-20px)" },
         },
         glow: {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(6, 182, 212, 0.5)" },
-          "50%": { boxShadow: "0 0 30px rgba(6, 182, 212, 0.8)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(185, 104, 120, 0.5)" },
+          "50%": { boxShadow: "0 0 30px rgba(185, 104, 120, 0.8)" },
         },
       },
       animation: {

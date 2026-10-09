@@ -1,6 +1,9 @@
+"use client"
+
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { Search } from "lucide-react"
 
 const achievements = [
 	{
@@ -97,6 +100,12 @@ const sortedAchievements = [...achievements].sort((a, b) => {
 
 const certificates: typeof achievements = [
 	{
+		title: "Certified Generative AI Professional",
+		issuer: "Oracle Cloud Infrastructure",
+		date: "October 2025",
+		link: "https://drive.google.com/file/d/1i0RhP9g1rVN92irfuKihPLw_2PIUcNli/view?usp=drive_link",
+	},
+	{
 		title: "AI Fundamentals",
 		issuer: "DataCamp",
 		date: "2025",
@@ -137,75 +146,57 @@ const timelineSections = [
 export default function CertificatesSection() {
 	const [activeSection, setActiveSection] = useState("achievements")
 	const [showAll, setShowAll] = useState(false)
+	const [query, setQuery] = useState("")
 
 	const currentSection =
 		timelineSections.find((s) => s.key === activeSection) ||
 		timelineSections[0]
 	const isAchievements = activeSection === "achievements"
+	const filteredData = currentSection.data.filter((item) =>
+		[item.title, item.issuer, item.date].join(" ").toLowerCase().includes(query.toLowerCase().trim())
+	)
 	const displayedData = isAchievements && !showAll
-		? currentSection.data.slice(0, 8)
-		: currentSection.data
+		? filteredData.slice(0, 4)
+		: filteredData
 
 	return (
 		<motion.section
 			id="certificates"
-			className="relative py-20 px-6"
+			className="relative px-6 pb-12 pt-32 md:pt-36"
 			initial={{ opacity: 0, y: 40 }}
 			whileInView={{ opacity: 1, y: 0 }}
 			viewport={{ once: true }}
 			transition={{ duration: 0.7, ease: "easeOut" }}
 		>
-			<div className="container mx-auto max-w-6xl">
-				<h2 className="text-3xl md:text-4xl font-bold text-center mb-14 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-					Certificates
-				</h2>
-				<div className="flex flex-col md:flex-row gap-8">
-					{/* Timeline Navigation */}
-					<ol className="relative border-l-2 border-cyan-700 md:w-64 w-full mb-8 md:mb-0">
-						{timelineSections.map((section, idx) => (
-							<li
-								key={section.key}
-								className={`mb-8 ml-6 cursor-pointer group`}
-								onClick={() => {
-									setActiveSection(section.key)
-									setShowAll(false)
-								}}
-							>
-								<div
-									className="absolute -left-4 flex items-center justify-center w-6 h-6 rounded-full border-2 border-cyan-700 bg-gray-900 transition-all
-                  "
-									style={{
-										borderColor:
-											activeSection === section.key
-												? "#22d3ee"
-												: "#155e75",
-										boxShadow:
-											activeSection === section.key
-												? "0 0 0 2px #22d3ee"
-												: "none",
-										transform:
-											activeSection === section.key
-												? "scale(1.15)"
-												: "scale(1)",
-									}}
-								/>
-								<div
-									className={`pl-2 transition-colors border-l-2 ${
-										activeSection === section.key
-											? "border-cyan-400 text-cyan-300"
-											: "border-transparent text-gray-400 group-hover:text-cyan-200"
-									}`}
-								>
-									<div className="font-semibold text-base">
-										{section.label}
-									</div>
-									<div className="text-xs">{section.description}</div>
-								</div>
-							</li>
-						))}
-					</ol>
-					{/* Content */}
-					<div className="flex-1">
+			<div className="container mx-auto max-w-4xl">
+				<p className="mb-2 text-[10px] font-medium uppercase tracking-[0.2em] text-cocoa-600">Continuous learning</p>
+				<h2 className="text-3xl font-bold tracking-[-0.04em] text-gray-900 md:text-4xl">Certificates</h2>
+				<p className="mb-7 mt-2 text-sm leading-relaxed text-gray-600">Credentials in AI, data science, cloud, SQL, and responsible technology.</p>
+				<label className="mb-5 flex items-center gap-2 border-b border-cocoa-700/20 pb-2 text-gray-500">
+					<Search className="h-4 w-4" />
+					<input
+						value={query}
+						onChange={(event) => setQuery(event.target.value)}
+						placeholder="Search certificates, issuers, or skills..."
+						aria-label="Search certificates"
+						className="w-full bg-transparent text-sm text-gray-900 outline-none placeholder:text-gray-500 dark:text-white"
+					/>
+				</label>
+				<div className="mb-7 flex flex-wrap gap-x-5 gap-y-2 border-b border-cocoa-700/20 pb-3">
+					{timelineSections.map((section) => (
+						<button
+							key={section.key}
+							onClick={() => {
+								setActiveSection(section.key)
+								setShowAll(false)
+							}}
+							className={`text-xs transition-colors ${activeSection === section.key ? "font-semibold text-cocoa-700 underline underline-offset-4" : "text-gray-500 hover:text-cocoa-600"}`}
+						>
+							{section.label}
+						</button>
+					))}
+				</div>
+				<div className="flex-1">
 						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 							{displayedData.length === 0 ? (
 								<div className="col-span-full text-center text-gray-400 py-8">
@@ -215,7 +206,7 @@ export default function CertificatesSection() {
 								displayedData.map((course, idx) => (
 									<motion.div
 										key={idx}
-										className="bg-gray-900/70 p-3 rounded-lg border border-cyan-700/20 hover:border-cyan-400/60 transition-all duration-200 shadow group flex flex-col"
+										className="bg-gray-900/70 p-3 rounded-lg border border-cocoa-700/20 hover:border-cocoa-400/60 transition-all duration-200 shadow group flex flex-col"
 										initial={{ opacity: 0, y: 20 }}
 										whileInView={{ opacity: 1, y: 0 }}
 										viewport={{ once: true }}
@@ -228,7 +219,7 @@ export default function CertificatesSection() {
 											<div className="font-semibold text-sm text-white leading-tight mb-1">
 												{course.title}
 											</div>
-											<div className="text-xs text-purple-300 mb-2">
+											<div className="text-xs text-cocoa-300 mb-2">
 												{course.issuer}
 											</div>
 										</div>
@@ -236,7 +227,7 @@ export default function CertificatesSection() {
 											href={course.link}
 											target="_blank"
 											rel="noopener noreferrer"
-											className="text-cyan-400 hover:underline text-xs mt-auto"
+											className="text-cocoa-400 hover:underline text-xs mt-auto"
 										>
 											View →
 										</a>
@@ -245,11 +236,11 @@ export default function CertificatesSection() {
 							)}
 						</div>
 						{/* More/Less Button */}
-						{isAchievements && currentSection.data.length > 4 && (
+						{isAchievements && filteredData.length > 4 && (
 							<div className="flex justify-center mt-6">
 								<Button
 									variant="outline"
-									className="border-cyan-400 text-cyan-400 hover:bg-cyan-500/10 hover:text-white px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300"
+									className="border-cocoa-400 text-cocoa-400 hover:bg-cocoa-500/10 hover:text-white px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300"
 									onClick={() => setShowAll((v) => !v)}
 								>
 									{showAll ? "Show Less" : "Show More"}
@@ -258,7 +249,6 @@ export default function CertificatesSection() {
 						)}
 					</div>
 				</div>
-			</div>
 		</motion.section>
 	)
 }

@@ -1,0 +1,164 @@
+When approaching a software for evaluation, we often focus on what a system does: give it an input, observe the output, and check whether the result is correct.
+
+But what if we actually look inside the system?
+
+This is the idea behind white-box testing.
+
+## What is White-Box Testing?
+
+White-box testing is a software testing technique where the tester has knowledge of the internal structure and implementation of the application.
+
+Instead of treating the program as a black box, we can see things like:
+
+- the source code
+- conditions and branches
+- loops
+- functions
+- data flows
+- execution paths
+
+The goal is not only to check whether the program produces the right output, but also to make sure that the important parts of the code are actually being executed and tested.
+
+## A simple example
+
+Imagine we have this function:
+
+```python
+def classify_age(age):
+    if age < 13:
+        return "child"
+    elif age < 18:
+        return "teenager"
+    else:
+        return "adult"
+```
+
+A basic test might check:
+
+```text
+classify_age(20) -> "adult"
+```
+
+But looking at the code tells us that there are actually three branches.
+
+```text
+             age < 13?
+             /       \
+           YES        NO
+            |          |
+         "child"    age < 18?
+                      /    \
+                    YES     NO
+                     |       |
+                "teenager" "adult"
+```
+
+So a better white-box test suite would include values that exercise each branch:
+
+```text
+10 -> child
+15 -> teenager
+20 -> adult
+```
+
+The idea is to deliberately construct tests that cover different parts of the program.
+
+## What are we trying to cover?
+
+One of the interesting aspects of white-box testing is code coverage.
+
+Some common forms are:
+
+### Statement coverage
+
+Have the executable statements been executed?
+
+### Branch coverage
+
+Have both sides of conditions such as `if/else` been tested?
+
+### Path coverage
+
+Have different possible execution paths through the program been explored?
+
+Higher coverage can give us more confidence, but 100% coverage does not automatically mean bug-free software.
+
+A test can execute a line of code without actually checking whether its behaviour is correct.
+
+## White-box vs. Black-box vs. Grey-box
+
+![Figure 1: Comparison of black-box, grey-box, and white-box testing](/images/blog/white-box-testing-looking-inside/figure-1.png)
+
+_Figure 1. A comparative overview of three software testing approaches - Black-box, Grey-box, and White-box - categorized by the tester's level of knowledge regarding the internal structure of the system. The diagram outlines the distinct goals and methodologies for each approach, from focusing purely on functionality (Black-box) to examining source code and execution paths for structural coverage (White-box)._
+
+## Why does this matter for AI systems?
+
+This becomes more complicated when we move from traditional software to AI and machine learning systems.
+
+With a traditional function, we can inspect the source code and reason about many possible execution paths.
+
+With a neural network containing millions or billions of parameters, the internal behavior is much harder to interpret.
+
+For example, we can inspect the architecture of an LLM, its attention layers, parameters, prompts, and outputs. But simply knowing the architecture does not tell us exactly why a particular response was generated.
+
+This raises an interesting question:
+
+> Can we really apply the traditional idea of white-box testing to AI systems?
+
+Not in exactly the same way.
+
+Instead, AI testing often combines several perspectives: testing the surrounding software, evaluating model behaviour, checking robustness, analysing failures, and sometimes studying the model's internal representations.
+
+## A small connection to LLMs
+
+When working with an LLM application, there are actually several layers that can be tested.
+
+For example:
+
+```text
+User
+  |
+Prompt / Application Logic
+  |
+Retrieval System
+  |
+LLM
+  |
+Post-processing
+  |
+Final Answer
+```
+
+A failure at any of these stages can affect the final result.
+
+If a RAG application gives an incorrect answer, for example, the problem might not be the LLM itself.
+
+The retrieval system might have returned irrelevant documents.
+
+The prompt might have been poorly constructed.
+
+The model might have misunderstood the retrieved information.
+
+Or the application might have incorrectly processed the model's response.
+
+This is why testing AI applications requires looking at the whole pipeline, rather than treating the LLM as a magical component in the middle.
+
+## One question I keep wondering about
+
+This also made me think about something slightly more unsettling when we bring LLMs into the picture.
+
+![Figure 2: Layered request flow of a typical LLM application](/images/blog/white-box-testing-looking-inside/figure-2.svg)
+
+_Figure 2. Layered request flow of a typical LLM application. A user query descends through four stacked components - Application Code, Retrieval / RAG, the LLM, and Output Processing - each annotated with the testing strategy most commonly applied to it (white-box, component, model evaluation, and software testing respectively), before producing the final Answer._
+
+In other words, are we testing whether the system genuinely behaves correctly, or are we sometimes only testing whether it knows how to pass the test?
+
+And this leads to an even stranger question:
+
+> If an LLM can see the code and the tests, is it passing through the tests because its behaviour satisfies them - or is it finding a way to go around them?
+
+I don't have a definitive answer to this yet, but I find the question interesting because it connects traditional software testing with a much newer problem: how do we evaluate an intelligent system when the system itself can potentially reason about the evaluation?
+
+Maybe the challenge isn't only building better tests.
+
+Maybe it is also building tests that are difficult to game.

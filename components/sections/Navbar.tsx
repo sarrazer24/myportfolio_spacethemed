@@ -1,111 +1,133 @@
 "use client";
-import React, { useState } from "react";
-import { X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Menu, Moon, Sun, X } from "lucide-react";
 import { Sheet, SheetTrigger, SheetContent, SheetTitle } from "@/components/ui/sheet";
-import { CiMenuFries } from "react-icons/ci";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRouter, usePathname } from "next/navigation"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { siteConfig } from "@/config/site"
 
-type NavItem = { label: string; id?: string; href?: string }
-
-const navItems: NavItem[] = [
-  { label: "Home", id: "home" },
-  { label: "About", id: "about" },
-  { label: "Research", id: "research" },
-  { label: "Projects", id: "projects" },
-  { label: "Research Log", id: "research-log" },
-  { label: "Skills", id: "skills" },
-  { label: "Experience", id: "experience" },
-  { label: "Contact", id: "contact" },
-];
-
-export default function Navbar({ scrollToSection }: { scrollToSection?: (id: string) => void }) {
+export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const router = useRouter();
+  const [darkMode, setDarkMode] = useState(false);
   const pathname = usePathname();
 
-  const handleNavClick = (item: NavItem) => {
-    if (item.href) router.push(item.href);
-    else if (scrollToSection && pathname === "/") scrollToSection(item.id!);
-    else router.push(`/#${item.id}`);
-    setMenuOpen(false);
+  useEffect(() => {
+    const savedTheme = window.localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const shouldUseDarkMode = savedTheme === "dark" || (!savedTheme && prefersDark);
+
+    document.documentElement.classList.toggle("dark", shouldUseDarkMode);
+    setDarkMode(shouldUseDarkMode);
+  }, []);
+
+  const toggleTheme = () => {
+    const nextDarkMode = !darkMode;
+    document.documentElement.classList.toggle("dark", nextDarkMode);
+    window.localStorage.setItem("theme", nextDarkMode ? "dark" : "light");
+    setDarkMode(nextDarkMode);
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-gradient-to-r from-black/60 via-black/30 to-black/60 backdrop-blur-xl border-b border-cyan-500/20 shadow-lg">
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+    <nav className="site-nav fixed top-0 z-50 w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(15,23,42,0.04)]">
+      <div className="container relative mx-auto flex items-center justify-between px-6 py-4">
         <div
-          className="text-2xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent select-none cursor-pointer tracking-wide drop-shadow-lg"
-          onClick={() => handleNavClick(navItems[0])}
+          className="cursor-pointer select-none text-2xl font-extrabold tracking-wide"
+          onClick={() => setMenuOpen(false)}
         >
-          Sarra Zerguerras
+          <Link className="site-brand transition-colors" href="/">
+            sarraverse
+          </Link>
         </div>
-        {/* Desktop Nav */}
-        <div className="hidden md:flex space-x-8">
-          {navItems.map((item) => (
-            <button
+
+        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center space-x-8 md:flex">
+          {siteConfig.navItems.map((item) => (
+            <Link
               key={item.label}
-              onClick={() => handleNavClick(item)}
-              className="relative group text-gray-200 hover:text-cyan-400 transition-all duration-300 font-semibold tracking-wide"
+              href={item.href}
+              className={`relative group font-semibold tracking-wide transition-colors duration-300 ${pathname === item.href ? "text-cocoa-700" : "text-slate-700 hover:text-cocoa-700"}`}
             >
               {item.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300"></span>
-            </button>
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-cocoa-500 transition-all duration-300 ${pathname === item.href ? "w-full" : "w-0 group-hover:w-full"}`}
+              ></span>
+            </Link>
           ))}
         </div>
-        {/* Mobile Nav */}
-        <div className="md:hidden">
-          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-            <SheetTrigger asChild>
-              <button aria-label="Open menu">
-                <CiMenuFries className="text-[32px] text-cyan-400 drop-shadow-lg" />
-              </button>
-            </SheetTrigger>
-            <AnimatePresence>
-              {menuOpen && (
-                <SheetContent
-                  side="right"
-                  className="bg-[#0C081B] border-none p-0 shadow-2xl flex items-center justify-center"
-                  forceMount
-                >
-                  <motion.div
-                    key="mobile-nav"
-                    initial={{ x: "100%", opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: "100%", opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="w-full h-full flex items-center justify-center"
+
+        <div className="ml-auto flex items-center gap-3">
+          <Link
+            href="/KhayraSarraZerguerrasCV.pdf"
+            target="_blank"
+            rel="noreferrer"
+            className="hidden rounded-full border border-cocoa-500 px-5 py-2 text-sm font-semibold tracking-wide text-cocoa-700 transition-colors hover:bg-cocoa-500 hover:text-white md:block"
+          >
+            View Resume
+          </Link>
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            className="rounded-full p-2 text-slate-700 transition-colors hover:bg-cocoa-500/10 hover:text-cocoa-700 dark:text-slate-200"
+          >
+            {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
+
+          <div className="md:hidden">
+            <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+              <SheetTrigger asChild>
+                <button aria-label="Open menu">
+                  <Menu className="h-8 w-8 text-slate-800 dark:text-slate-200" />
+                </button>
+              </SheetTrigger>
+              <AnimatePresence>
+                {menuOpen && (
+                  <SheetContent
+                    side="right"
+                    className="site-menu flex items-center justify-center border-none bg-[#f7f3ee] p-0 shadow-2xl"
+                    forceMount
                   >
-                    <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
-                    <div className="flex flex-col items-center justify-center h-full w-full">
-                      <button
-                        className="absolute top-6 right-6 text-cyan-400 hover:text-pink-400 transition-colors"
-                        onClick={() => setMenuOpen(false)}
-                        aria-label="Close menu"
-                      >
-                        <X size={32} />
-                      </button>
-                      <nav className="flex flex-col items-center justify-center gap-12 flex-1">
-                        {navItems.map((item) => (
-                          <button
-                            key={item.label}
-                            onClick={() => handleNavClick(item)}
-                            className="text-2xl font-bold text-gray-100 hover:text-cyan-400 transition-all tracking-wider"
-                            style={{ letterSpacing: "0.04em" }}
-                          >
-                            {item.label}
-                          </button>
-                        ))}
-                      </nav>
-                      <div className="text-center text-2xl pt-10 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-extrabold tracking-wide drop-shadow-lg">
-                        Sarra Zerguerras
+                    <motion.div
+                      key="mobile-nav"
+                      initial={{ x: "100%", opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: "100%", opacity: 0 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      className="flex h-full w-full items-center justify-center"
+                    >
+                      <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
+                      <div className="flex h-full w-full flex-col items-center justify-center">
+                        <button
+                          className="absolute right-6 top-6 text-slate-800 transition-colors hover:text-cocoa-700 dark:text-slate-200"
+                          onClick={() => setMenuOpen(false)}
+                          aria-label="Close menu"
+                        >
+                          <X size={32} />
+                        </button>
+                        <nav className="flex flex-1 flex-col items-center justify-center gap-12">
+                          {siteConfig.navItems.map((item) => (
+                            <Link
+                              key={item.label}
+                              href={item.href}
+                              onClick={() => setMenuOpen(false)}
+                              className={`text-2xl font-bold tracking-wider transition-all ${pathname === item.href ? "text-cocoa-700" : "text-slate-900 hover:text-cocoa-700 dark:text-slate-100"}`}
+                              style={{ letterSpacing: "0.04em" }}
+                            >
+                              {item.label}
+                            </Link>
+                          ))}
+                        </nav>
+                        <div className="pb-10 text-center text-2xl font-extrabold tracking-wide text-cocoa-700 dark:text-white">
+                          sarraverse
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                </SheetContent>
-              )}
-            </AnimatePresence>
-          </Sheet>
+                    </motion.div>
+                  </SheetContent>
+                )}
+              </AnimatePresence>
+            </Sheet>
+          </div>
         </div>
       </div>
     </nav>

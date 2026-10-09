@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Sarra Zerguerras Portfolio
 
-## Getting Started
+Personal portfolio for Khayra Sarra Zerguerras, built with Next.js,
+TypeScript, Tailwind CSS, and MDX. The site presents engineering projects,
+research interests, creative work, and writing about AI and software
+engineering.
 
-First, run the development server:
+## Development
+
+The project requires Node.js 20 or newer.
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) after the development
+server starts.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- `npm run dev` starts the development server.
+- `npm run build` creates the production build.
+- `npm run start` serves the production build locally.
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+```text
+app/                 Routes, layouts, and the contact API route
+components/          Shared site, section, blog, and UI components
+config/              Site-wide navigation and social-link configuration
+content/journal/     Journal entries rendered by the journal routes
+content/posts/       Published blog posts rendered as MDX
+content/templates/   Copyable templates for future content
+hooks/                Reusable React hooks
+lib/                  Content loaders and shared utilities
+public/               Static images, logos, icons, and downloadable files
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Adding a blog post
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Add an `.mdx` file under `content/posts/`.
+2. Add its metadata and slug to the registry in `lib/posts.ts`.
+3. Put post-specific images under
+   `public/images/blog/<post-slug>/` and reference them with root-relative
+   paths such as `/images/blog/<post-slug>/figure-1.png`.
 
-## Deploy on Vercel
+### Contact form configuration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The contact API uses Gmail SMTP credentials supplied through environment
+variables. Create a local `.env.local` file with:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```text
+EMAIL_USER=your-address@example.com
+EMAIL_PASS=your-app-password
+```
+
+Do not commit environment files or credentials. They are excluded by
+`.gitignore`.
+
+## Deployment
+
+The app can be deployed to any Next.js-compatible host. Set the contact
+environment variables in the host's secret or environment-variable settings
+before enabling the contact form.

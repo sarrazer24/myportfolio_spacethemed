@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Mail, Linkedin, Instagram, Github } from "lucide-react"
 import { useState } from "react"
 import { useRef } from "react"
+import { siteConfig } from "@/config/site"
 
 export default function ContactSection() {
   const [form, setForm] = useState({ name: "", email: "", message: "" })
@@ -59,51 +60,52 @@ export default function ContactSection() {
   return (
     <motion.section
       id="contact"
-      className="relative py-20 px-6"
+      className="relative px-6 pb-20 pt-32 md:pt-36"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, ease: "easeOut" }}
     >
       <div className="container mx-auto max-w-4xl">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-          Contact Me
-        </h2>
+        <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.2em] text-cocoa-600">Let&apos;s connect</p>
+        <h2 className="text-3xl font-bold tracking-[-0.04em] text-gray-900 md:text-4xl">Contact Me</h2>
+        <p className="mb-10 mt-2 text-sm leading-relaxed text-gray-600">
+          Open to AI, data science, AI safety, and security internship opportunities.
+        </p>
         <div className="grid md:grid-cols-2 gap-12">
           <div>
-            <h3 className="text-2xl font-semibold mb-6 text-cyan-400">Let's Connect</h3>
+            <h3 className="text-2xl font-semibold mb-6 text-cocoa-400">Let's Connect</h3>
             <p className="text-gray-300 mb-8 leading-relaxed">
-              Ready to embark on a cosmic journey of collaboration? Whether you have a project idea, want to discuss
-              technology, or just want to say hello, I'd love to hear from you!
+              Open to PFE / Master 2 internship opportunities starting January 2027. I would be glad to discuss a research or engineering collaboration.
             </p>
             <div className="flex items-center space-x-6 mt-2">
               <a
-                href="mailto:ks.zerguerras@esi-sba.dz"
+                href={`mailto:${siteConfig.email}`}
                 title="Send Email"
                 className="hover:scale-110 transition-transform"
               >
-                <Mail className="w-6 h-6 text-cyan-400" />
+                <Mail className="w-6 h-6 text-cocoa-400" />
               </a>
               <a
-                href="https://linkedin.com/in/sarra-zerguerras-1b0978195"
+                href={siteConfig.social.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="LinkedIn"
                 className="hover:scale-110 transition-transform"
               >
-                <Linkedin className="w-6 h-6 text-purple-400" />
+                <Linkedin className="w-6 h-6 text-cocoa-400" />
               </a>
               <a
-                href="https://instagram.com/sarra.zerguerras"
+                href={siteConfig.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Instagram"
                 className="hover:scale-110 transition-transform"
               >
-                <Instagram className="w-6 h-6 text-pink-400" />
+                <Instagram className="w-6 h-6 text-cocoa-400" />
               </a>
               <a
-                href="https://github.com/sarrazer24"
+                href={siteConfig.social.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="GitHub"
@@ -111,8 +113,11 @@ export default function ContactSection() {
               >
                 <Github className="w-6 h-6 text-gray-400" />
               </a>
+              <a href={siteConfig.social.tiktok} target="_blank" rel="noopener noreferrer" title="TikTok" className="hover:scale-110 transition-transform"><span className="text-cocoa-400 text-xl">♪</span></a>
+              <a href={siteConfig.social.youtube} target="_blank" rel="noopener noreferrer" title="YouTube" className="hover:scale-110 transition-transform"><span className="text-cocoa-400 text-xl">▶</span></a>
+              <a href={siteConfig.social.substack} target="_blank" rel="noopener noreferrer" title="Substack" className="hover:scale-110 transition-transform"><span className="text-cocoa-400 text-xl">S</span></a>
               <a
-                href="https://dribbble.com/zerguerras-khayra-sarra"
+                href={siteConfig.social.dribbble}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Dribbble"
@@ -126,8 +131,15 @@ export default function ContactSection() {
                 />
               </a>
             </div>
+            <div className="mt-8 border border-cocoa-700/40 px-4 py-5 sm:px-5">
+              <h4 className="mb-2 text-lg font-bold text-gray-900">Get in touch!</h4>
+              <p className="text-xs leading-relaxed text-gray-600 sm:text-sm">Anything to share? Write to <a href={`mailto:${siteConfig.email}`} className="text-cocoa-600 hover:text-cocoa-800">{siteConfig.email}</a> or follow along through <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" className="text-cocoa-600 hover:text-cocoa-800">Instagram</a>.</p>
+              <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs text-cocoa-600">
+                {([['YouTube', siteConfig.social.youtube], ['Instagram', siteConfig.social.instagram], ['TikTok', siteConfig.social.tiktok], ['Substack', siteConfig.social.substack]] as const).map(([label, href]) => <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="hover:text-cocoa-800">{label}</a>)}
+              </div>
+            </div>
           </div>
-          <Card className="bg-gray-900/50 border-cyan-500/20 backdrop-blur-sm">
+          <Card className="bg-gray-900/50 border-cocoa-500/20 backdrop-blur-sm">
             <CardContent className="p-6">
               <form className="space-y-6" onSubmit={handleSubmit}>
                 <Input
@@ -137,7 +149,7 @@ export default function ContactSection() {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   required
-                  className="bg-gray-800/50 border-gray-600 focus:border-cyan-500 text-white placeholder-gray-400"
+                  className="bg-gray-800/50 border-gray-600 focus:border-cocoa-500 text-white placeholder-gray-400"
                 />
                 {isEmpty("name") && (
                   <div className="text-red-400 text-xs pl-1">Name is required.</div>
@@ -150,7 +162,7 @@ export default function ContactSection() {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   required
-                  className="bg-gray-800/50 border-gray-600 focus:border-cyan-500 text-white placeholder-gray-400"
+                  className="bg-gray-800/50 border-gray-600 focus:border-cocoa-500 text-white placeholder-gray-400"
                 />
                 {isEmpty("email") && (
                   <div className="text-red-400 text-xs pl-1">Email is required.</div>
@@ -163,7 +175,7 @@ export default function ContactSection() {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   required
-                  className="bg-gray-800/50 border-gray-600 focus:border-cyan-500 text-white placeholder-gray-400 resize-none"
+                  className="bg-gray-800/50 border-gray-600 focus:border-cocoa-500 text-white placeholder-gray-400 resize-none"
                 />
                 {isEmpty("message") && (
                   <div className="text-red-400 text-xs pl-1">Message is required.</div>
@@ -173,7 +185,7 @@ export default function ContactSection() {
                 )}
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white font-semibold py-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/25"
+                  className="w-full bg-gradient-to-r from-cocoa-500 to-cocoa-500 hover:from-cocoa-400 hover:to-cocoa-400 text-white font-semibold py-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-cocoa-500/25"
                   disabled={loading}
                 >
                   {loading ? "Sending..." : "Send Message"}

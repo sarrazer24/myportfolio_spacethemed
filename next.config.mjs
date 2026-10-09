@@ -1,6 +1,9 @@
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants.js";
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const createNextConfig = (phase) => ({
   output: "standalone",
+  distDir: phase === PHASE_DEVELOPMENT_SERVER ? ".next-dev" : ".next",
   allowedDevOrigins: ["10.2.0.2"],
   eslint: {
     ignoreDuringBuilds: true,
@@ -11,6 +14,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-};
+});
 
-export default nextConfig;
+export default createNextConfig;
