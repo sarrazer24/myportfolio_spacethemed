@@ -115,11 +115,23 @@ const certificates: typeof achievements = [
 
 const participation: typeof achievements = [
 	{
+		title: "Hackathon Participation - Forsatic",
+		issuer: "Algérie Télécom",
+		date: "2025",
+		link: "https://drive.google.com/file/d/1ZjNUpMf6JFE9xAN4LgwtVqkC2O5qzLWW/view?usp=sharing",
+	},
+	{
+		title: "Datathon Participation - AlphaAI (3rd edition)",
+		issuer: "Alphabit Club",
+		date: "2025",
+		link: "https://drive.google.com/file/d/1dR2muITqBBxx4eRQfaMEQBKp9mw5bpHx/view?usp=sharing",
+	},
+	{
 		title: "Hackathon Participation - DevFest Algiers 2024",
 		issuer: "GDG Algiers",
 		date: "2024",
 		link: "https://drive.google.com/file/d/1ZjNUpMf6JFE9xAN4LgwtVqkC2O5qzLWW/view?usp=sharing",
-	},
+	}
 ]
 
 const timelineSections = [

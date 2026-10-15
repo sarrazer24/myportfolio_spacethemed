@@ -32,7 +32,7 @@ export default function ContactSection() {
     setTouched({ name: true, email: true, message: true })
     setError(null)
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
-      setError("Please fill in all fields.")
+      setError("Please complete all fields before sending.")
       return
     }
     setLoading(true)
@@ -48,10 +48,10 @@ export default function ContactSection() {
         setForm({ name: "", email: "", message: "" })
         setTouched({ name: false, email: false, message: false })
       } else {
-        setError("Failed to send message. Please try again.")
+        setError("Something went wrong. Please try again or contact me by email.")
       }
     } catch (err) {
-      setError("Failed to send message. Please try again.")
+      setError("Something went wrong. Please try again or contact me by email.")
     } finally {
       setLoading(false)
     }
@@ -68,15 +68,15 @@ export default function ContactSection() {
     >
       <div className="container mx-auto max-w-4xl">
         <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.2em] text-cocoa-600">Let&apos;s connect</p>
-        <h2 className="text-3xl font-bold tracking-[-0.04em] text-gray-900 md:text-4xl">Contact Me</h2>
+        <h2 className="text-3xl font-bold tracking-[-0.04em] text-gray-900 md:text-4xl">Have a project or opportunity in mind?</h2>
         <p className="mb-10 mt-2 text-sm leading-relaxed text-gray-600">
-          Open to AI, data science, AI safety, and security internship opportunities.
+          I&apos;m always happy to connect with people working on interesting ideas in AI. If you&apos;d like to discuss research, an internship, or a potential collaboration, I&apos;d love to hear from you.
         </p>
         <div className="grid md:grid-cols-2 gap-12">
           <div>
-            <h3 className="text-2xl font-semibold mb-6 text-cocoa-400">Let's Connect</h3>
+            <h3 className="text-2xl font-semibold mb-6 text-cocoa-400">Get in touch</h3>
             <p className="text-gray-300 mb-8 leading-relaxed">
-              Open to PFE / Master 2 internship opportunities starting January 2027. I would be glad to discuss a research or engineering collaboration.
+              I&apos;m currently interested in research and PFE internship opportunities starting in January 2027, particularly in AI safety, LLM security, and trustworthy AI.
             </p>
             <div className="flex items-center space-x-6 mt-2">
               <a
@@ -132,8 +132,8 @@ export default function ContactSection() {
               </a>
             </div>
             <div className="mt-8 border border-cocoa-700/40 px-4 py-5 sm:px-5">
-              <h4 className="mb-2 text-lg font-bold text-gray-900">Get in touch!</h4>
-              <p className="text-xs leading-relaxed text-gray-600 sm:text-sm">Anything to share? Write to <a href={`mailto:${siteConfig.email}`} className="text-cocoa-600 hover:text-cocoa-800">{siteConfig.email}</a> or follow along through <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" className="text-cocoa-600 hover:text-cocoa-800">Instagram</a>.</p>
+              <h4 className="mb-2 text-lg font-bold text-gray-900">Prefer email?</h4>
+              <p className="text-xs leading-relaxed text-gray-600 sm:text-sm">You can also write to <a href={`mailto:${siteConfig.email}`} className="text-cocoa-600 hover:text-cocoa-800">{siteConfig.email}</a> directly. I&apos;ll get back to you as soon as I can.</p>
               <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs text-cocoa-600">
                 {([['YouTube', siteConfig.social.youtube], ['Instagram', siteConfig.social.instagram], ['TikTok', siteConfig.social.tiktok], ['Substack', siteConfig.social.substack]] as const).map(([label, href]) => <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="hover:text-cocoa-800">{label}</a>)}
               </div>
@@ -144,7 +144,7 @@ export default function ContactSection() {
               <form className="space-y-6" onSubmit={handleSubmit}>
                 <Input
                   name="name"
-                  placeholder="Your Name"
+                  placeholder="Your name"
                   value={form.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -152,12 +152,12 @@ export default function ContactSection() {
                   className="bg-gray-800/50 border-gray-600 focus:border-cocoa-500 text-white placeholder-gray-400"
                 />
                 {isEmpty("name") && (
-                  <div className="text-red-400 text-xs pl-1">Name is required.</div>
+                  <div className="text-red-400 text-xs pl-1">Please enter your name.</div>
                 )}
                 <Input
                   name="email"
                   type="email"
-                  placeholder="Your Email"
+                  placeholder="Your email address"
                   value={form.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -165,11 +165,11 @@ export default function ContactSection() {
                   className="bg-gray-800/50 border-gray-600 focus:border-cocoa-500 text-white placeholder-gray-400"
                 />
                 {isEmpty("email") && (
-                  <div className="text-red-400 text-xs pl-1">Email is required.</div>
+                  <div className="text-red-400 text-xs pl-1">Please enter your email address.</div>
                 )}
                 <Textarea
                   name="message"
-                  placeholder="Your Message"
+                  placeholder="Tell me a little about what you have in mind..."
                   rows={5}
                   value={form.message}
                   onChange={handleChange}
@@ -178,7 +178,7 @@ export default function ContactSection() {
                   className="bg-gray-800/50 border-gray-600 focus:border-cocoa-500 text-white placeholder-gray-400 resize-none"
                 />
                 {isEmpty("message") && (
-                  <div className="text-red-400 text-xs pl-1">Message is required.</div>
+                  <div className="text-red-400 text-xs pl-1">Please enter a message.</div>
                 )}
                 {error && (
                   <div className="text-red-400 text-center pt-2">{error}</div>
@@ -188,11 +188,11 @@ export default function ContactSection() {
                   className="w-full bg-gradient-to-r from-cocoa-500 to-cocoa-500 hover:from-cocoa-400 hover:to-cocoa-400 text-white font-semibold py-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-cocoa-500/25"
                   disabled={loading}
                 >
-                  {loading ? "Sending..." : "Send Message"}
+                  {loading ? "Sending message..." : "Send message"}
                 </Button>
                 {success && (
                   <div className="text-green-400 text-center pt-2">
-                    Your message has been sent!
+                    Your message has been sent successfully. Thanks for reaching out!
                   </div>
                 )}
               </form>
