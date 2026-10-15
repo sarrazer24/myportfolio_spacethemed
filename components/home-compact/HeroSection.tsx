@@ -16,15 +16,25 @@ export default function HeroSection() {
       <div>
         <p className="mb-2 inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.2em] text-cocoa-600">
           <Rocket className="h-3.5 w-3.5" />
-          AI & Data Science Engineer
+          AI & Data Science Engineering Student
         </p>
+
         <h1 className="text-3xl font-bold tracking-[-0.06em] text-gray-900 sm:text-4xl">
           Khayra Sarra Zerguerras
         </h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-600">
-          I build thoughtful systems at the intersection of AI, data, and human-centered design,
-          with a strong interest in LLMs, NLP, and AI safety.
+
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+          I’m an AI & Data Science Engineering student passionate about
+          exploring how AI systems work and how to make them more reliable
+          and secure. I’m particularly interested in LLMs, AI safety, and
+          the challenges of building trustworthy intelligent systems.
         </p>
+
+        <p className="mt-3 text-xs font-medium text-cocoa-700 dark:text-cocoa-400">
+          Open to research and internship opportunities in AI safety,
+          LLM security, and trustworthy AI.
+        </p>
+
         <div className="mt-4 flex flex-wrap gap-2">
           <Link
             href="/projects"
@@ -33,6 +43,7 @@ export default function HeroSection() {
             View projects
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
+
           <a
             href={`mailto:${siteConfig.email}`}
             className="home-contact-button inline-flex items-center gap-2 border border-cocoa-700/25 bg-white px-3 py-2 text-xs font-semibold text-gray-800 transition-colors hover:border-cocoa-500 hover:text-cocoa-700"
@@ -40,6 +51,7 @@ export default function HeroSection() {
             <Mail className="h-3.5 w-3.5" />
             Get in touch
           </a>
+
           <a
             href="/KhayraSarraZerguerrasCV.pdf"
             target="_blank"

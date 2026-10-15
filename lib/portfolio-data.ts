@@ -1,21 +1,26 @@
 export const researchInterests = [
   {
-    title: "Cybersecurity",
-    description: "Exploring how systems can be designed, tested, and defended against evolving threats.",
+    title: "AI Security and Safety",
+    description:
+      "Exploring how AI systems can be made safer and more reliable, with a focus on vulnerabilities, adversarial attacks, and potential misuse.",
   },
   {
     title: "Large Language Models",
-    description: "Learning how language models are built, evaluated, and used responsibly.",
+    description:
+      "Understanding how LLMs behave, evaluating their capabilities and limitations, and exploring ways to make them more reliable.",
   },
   {
     title: "Natural Language Processing",
-    description: "Working with methods that help machines process and reason about human language.",
+    description:
+      "Exploring methods that enable machines to understand, process, and generate human language.",
   },
   {
-    title: "AI Security and Safety",
-    description: "Studying misuse, attacks on models, and approaches to more trustworthy AI systems.",
+    title: "Cybersecurity",
+    description:
+      "Building an understanding of security principles and attack techniques relevant to identifying and addressing vulnerabilities in AI systems.",
   },
 ]
+
 
 export const experience = [
   {
