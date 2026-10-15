@@ -27,12 +27,9 @@ server starts.
 
 ```text
 app/                 Routes, layouts, and the contact API route
-components/          Shared site, section, blog, and UI components
+components/          Shared site, homepage, section, blog, and UI components
 config/              Site-wide navigation and social-link configuration
-content/journal/     Journal entries rendered by the journal routes
 content/posts/       Published blog posts rendered as MDX
-content/templates/   Copyable templates for future content
-hooks/                Reusable React hooks
 lib/                  Content loaders and shared utilities
 public/               Static images, logos, icons, and downloadable files
 ```
