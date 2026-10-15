@@ -11,24 +11,18 @@ interface SvgIconProps {
   size?: number;
 }
 
-const SvgIcon = ({
-  name,
-  className,
-  size = 64,
-}: SvgIconProps) => (
+const SvgIcon = ({ name, className, size = 64 }: SvgIconProps) => (
   <img
     src={`/svg/${name}.svg`}
-    alt={name}
+    alt=""
+    aria-hidden="true"
     className={className}
     width={size}
     height={size}
-    style={{
-      objectFit: "contain",
-      display: "inline-block",
-    }}
+    style={{ objectFit: "contain", display: "inline-block" }}
     loading="lazy"
     onError={(e) => {
-      const image = e.currentTarget as HTMLImageElement;
+      const image = e.currentTarget;
       if (image.dataset.fallback) return;
       image.dataset.fallback = "true";
       image.src = "/svg/fallback.svg";
@@ -39,21 +33,32 @@ const SvgIcon = ({
 // Skills grouped by their role
 const skillCategories = [
   {
-    title: "AI & Data",
-    description: "The area I'm currently specializing in",
+    title: "AI & Machine Learning",
+    description: "Building and evaluating intelligent systems",
     skills: [
       { name: "Python" },
-      { name: "Pandas" },
       { name: "PyTorch" },
+      { name: "Pandas" },
       { name: "Transformers", label: "Hugging Face / Transformers" },
       { name: "scikit-learn", label: "scikit-learn" },
       { name: "R" },
-      { name: "PostgreSQL" },
     ],
   },
   {
-    title: "Frontend",
-    description: "Building interactive digital experiences",
+    title: "LLMs & AI Security",
+    description: "Exploring reliable and secure AI systems",
+    skills: [
+      { name: "Python" },
+      { name: "OpenAI", label: "OpenAI API" },
+      { name: "pytest", label: "pytest" },
+      { name: "Pydantic" },
+      { name: "HTTPX" },
+      { name: "BeautifulSoup", label: "Beautiful Soup" },
+    ],
+  },
+  {
+    title: "Frontend Development",
+    description: "Building responsive, interactive experiences",
     skills: [
       { name: "TypeScript" },
       { name: "JavaScript" },
@@ -66,41 +71,36 @@ const skillCategories = [
   },
   {
     title: "Backend & APIs",
-    description: "Designing application logic and services",
+    description: "Developing application logic and services",
     skills: [
       { name: "Django" },
       { name: "Node.js", label: "Node.js" },
       { name: "Express", label: "Express.js" },
       { name: "Spring", label: "Spring Boot" },
       { name: "Java" },
-    ],
-  },
-  {
-    title: "Mobile & Databases",
-    description: "From mobile applications to data storage",
-    skills: [
-      { name: "Flutter" },
-      { name: "Dart" },
-      { name: "MySQL" },
-      { name: "MongoDB" },
-    ],
-  },
-  {
-    title: "Tools & Cloud",
-    description: "Development, deployment, and collaboration",
-    skills: [
-      { name: "Git" },
-      { name: "GitHub" },
-      { name: "Docker" },
-      { name: "AWS" },
       { name: "Postman" },
       { name: "Swagger" },
     ],
   },
   {
-    title: "Design & Workflow",
-    description: "Designing thoughtful user experiences",
+    title: "Databases & Cloud",
+    description: "Managing data and development environments",
     skills: [
+      { name: "MySQL" },
+      { name: "PostgreSQL" },
+      { name: "MongoDB" },
+      { name: "AWS" },
+      { name: "Docker" },
+      { name: "Git" },
+      { name: "GitHub" },
+    ],
+  },
+  {
+    title: "Mobile, Design & Workflow",
+    description: "From mobile applications to visual communication",
+    skills: [
+      { name: "Flutter" },
+      { name: "Dart" },
       { name: "Figma" },
       { name: "Canva" },
       { name: "Notion" },
@@ -134,8 +134,10 @@ export default function SkillsSection() {
           </h2>
 
           <p className="text-gray-400 max-w-2xl mx-auto mt-4 leading-relaxed">
-            A combination of AI and data science foundations, software
-            engineering, and creative product development.
+            From machine learning and deep learning to software engineering,
+            I enjoy building, testing, and understanding intelligent systems.
+            I am particularly interested in the security and reliability of
+            large language models.
           </p>
         </motion.div>
 
@@ -157,7 +159,6 @@ export default function SkillsSection() {
               <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-cocoa-500/0 via-cocoa-500/0 to-cocoa-500/0 group-hover:from-cocoa-500/10 group-hover:via-cocoa-500/10 group-hover:to-cocoa-500/10 transition-all duration-500 pointer-events-none" />
 
               <div className="relative">
-                {/* Category title */}
                 <div className="mb-5">
                   <h3 className="text-xl font-semibold text-gray-100">
                     {category.title}
@@ -168,7 +169,6 @@ export default function SkillsSection() {
                   </p>
                 </div>
 
-                {/* Skills */}
                 <div className="flex flex-wrap gap-3">
                   {category.skills.map((skill) => (
                     <div
@@ -193,7 +193,6 @@ export default function SkillsSection() {
           ))}
         </div>
 
-        {/* Small closing statement */}
         <motion.p
           className="text-center text-sm text-gray-500 mt-10"
           initial={{ opacity: 0 }}
@@ -201,11 +200,8 @@ export default function SkillsSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          Always learning, experimenting, and adding new tools to the stack.
+          Continuously learning through coursework, research, and hands-on projects.
         </motion.p>
-        <p className="text-center text-xs text-gray-600 mt-3">
-          TODO: Verify OpenCV usage in the GitHub repositories before adding it to the toolkit.
-        </p>
       </div>
     </section>
   );

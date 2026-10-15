@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ArrowDown, Rocket } from "lucide-react"
+import { ArrowRight, ArrowDown, Rocket } from "lucide-react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 
@@ -29,11 +29,11 @@ export default function HeroSection() {
 
         {/* Text */}
         <div className="flex-1 text-center md:text-left">
-          {/* Small identity label */}
+          {/* Identity label */}
           <div className="mb-3 flex items-center justify-center md:justify-start gap-2">
             <Rocket className="w-4 h-4 text-cocoa-400" />
             <span className="text-sm md:text-base text-cocoa-300 font-medium tracking-wide">
-              AI & Data Science Engineering Student
+              AI & Data Science Engineering Student · ESI-SBA
             </span>
           </div>
 
@@ -44,27 +44,30 @@ export default function HeroSection() {
 
           {/* Main positioning */}
           <h2 className="text-xl md:text-2xl text-gray-200 mb-4 font-semibold">
-            Building intelligent systems with{" "}
+            Exploring the intersection of{" "}
             <span className="text-cocoa-300">AI</span>,{" "}
-            <span className="text-cocoa-300">data</span>, and{" "}
-            <span className="text-cocoa-300">code</span>.
+            <span className="text-cocoa-300">security</span>, and{" "}
+            <span className="text-cocoa-300">trust</span>.
           </h2>
 
           {/* Description */}
           <p className="text-base md:text-lg text-gray-400 mb-6 max-w-2xl leading-relaxed mx-auto md:mx-0">
-            Fifth-year engineering student at ESI-SBA, interested in
-            artificial intelligence, data science, and intelligent
-            applications. I enjoy turning complex ideas into useful,
-            interactive digital experiences.
+            I am a final-year engineering student at ESI-SBA, Algeria,
+            interested in AI Safety, AI Security, and the challenges of
+            building reliable large language models. Through hands-on
+            projects, I explore model vulnerabilities, adversarial attacks,
+            and practical defenses. I am seeking a research internship
+            starting in January 2027 to deepen these interests and contribute
+            to meaningful work in secure and trustworthy AI.
           </p>
 
           {/* Focus tags */}
           <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-6">
             {[
-              "Artificial Intelligence",
-              "Data Science",
-              "Machine Learning",
-              "Full-Stack Development",
+              "AI Safety",
+              "LLM Security",
+              "Adversarial Attacks",
+              "Trustworthy AI",
             ].map((item) => (
               <span
                 key={item}
@@ -82,8 +85,8 @@ export default function HeroSection() {
               className="group bg-gradient-to-r from-cocoa-500 to-cocoa-500 hover:from-cocoa-400 hover:to-cocoa-400 text-white px-6 py-3 text-base font-semibold rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-cocoa-500/25"
             >
               <Link href="/projects">
-                View Projects
-                <ArrowDown className="ml-2 w-5 h-5 transition-transform group-hover:translate-y-1" />
+                Explore My Projects
+                <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
 
