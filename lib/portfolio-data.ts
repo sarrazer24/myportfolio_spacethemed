@@ -24,6 +24,12 @@ export const researchInterests = [
 
 export const experience = [
   {
+    period: "2026 - present",
+    title: "Research Collaborator",
+    organization: "INSAIT — Remote Collaboration with Dr. Yuxia Wang",
+    detail: "Contributing to data annotation for multilingual harmful humor detection and explanation.",
+  },
+  {
     period: "Summer 2025",
     title: "Software Development Intern",
     organization: "Caisse Nationale des Retraites (CNR), Chlef",
@@ -41,6 +47,6 @@ export const experience = [
     organization: "Ingenuims Club",
     detail: "",
   },
-]
+];
 
 export const hackathons = ["Forsatic", "AlphaAI (3rd edition)", "DevFest Algiers 2024"]

@@ -12,13 +12,13 @@ const featuredProjects = [
     title: "Smart Notes Generator",
     description: "An AI application that turns educational content into structured notes and helps learners extract important information.",
     tags: "Python · LLM · Machine Learning",
-    href: "https://github.com/sarrazer24/Smart-Notes-Generator",
+    href: "/projects/smart-notes-generator",
   },
   {
     title: "What If? F1 Simulator",
     description: "A data science project using historical racing data, statistical analysis, simulation, and interactive visualizations.",
     tags: "Python · Statistics · Visualization",
-    href: "https://github.com/sarrazer24",
+    href: "/projects/what-if-f1-simulator",
   },
 ]
 
@@ -38,11 +38,9 @@ export default function ProjectsSection() {
       </div>
       <div className="grid gap-3 md:grid-cols-3">
         {featuredProjects.map((project) => (
-          <a
+          <Link
             key={project.title}
             href={project.href}
-            target={project.href.startsWith("http") ? "_blank" : undefined}
-            rel={project.href.startsWith("http") ? "noopener noreferrer" : undefined}
             className="rounded-xl border border-cocoa-700/15 bg-white/45 p-4 transition-colors hover:border-cocoa-500/50 hover:bg-white/70 dark:bg-white/[0.04] dark:hover:bg-white/[0.08]"
           >
             <h3 className="text-sm font-semibold text-gray-900">{project.title}</h3>
@@ -50,7 +48,7 @@ export default function ProjectsSection() {
             <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-cocoa-600">
               {project.tags}
             </p>
-          </a>
+          </Link>
         ))}
       </div>
     </section>
