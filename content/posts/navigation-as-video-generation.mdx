@@ -1,0 +1,257 @@
+---
+title: "Don't Predict the Action, Imagine the Future: Navigation as Video Generation"
+description: "How ImagiNav lets a robot learn to navigate from 33 minutes of smartphone footage, and what the results do and don't prove."
+date: "2026-10-31"
+category: "Tech & AI"
+tags:
+  - Robotics
+  - Video Generation
+  - Vision-Language Navigation
+  - Paper Review
+paper:
+  title: "ImagiNav: Scalable Embodied Navigation via Generative Visual Prediction and Inverse Dynamics"
+  arxiv: "2603.13833"
+  venue: "IROS 2026"
+  url: "https://arxiv.org/abs/2603.13833"
+  pdf: "https://j1dan.github.io/ImagiNav/static/pdfs/ImagiNav.pdf"
+  project: "https://j1dan.github.io/ImagiNav/"
+  code: "https://github.com/J1dan/ImagiNav-release"
+  dataset: "https://huggingface.co/datasets/J1dan/imaginav-dataset"
+---
+
+{/*
+  MEDIA FILES: copy these into /public/images/blog/imaginav/ (same names), then they load automatically.
+    imaginav.mp4  imaginav.png  datacollection.png
+    02_generated_video.mp4  clip_20_30_4hz-598-19-left.mp4  clip_20_30_4hz-598-19-right.mp4
+    sim-real.mp4  diverse.mp4  imaginav-video.mp4
+  Tip: compress videos (for example 720p, H.264) so the page loads fast. All media belongs to the paper's authors: keep the credit lines.
+*/}
+
+###  How ImagiNav lets a robot learn to navigate from 33 minutes of smartphone footage, and what the results do and don't prove.
+
+Most navigation robots learn from expensive robot-specific data. **ImagiNav** skips that: it generates a *video of the future* from a language instruction, then measures how the camera moves in that video to get a path the robot can follow. Because the planner only deals with images, it can be trained on ordinary walking videos shot with a phone. The paper was accepted at **IROS 2026**.
+
+**Resources:** [Paper (arXiv)](https://arxiv.org/abs/2603.13833) · [Project page](https://j1dan.github.io/ImagiNav/) · [Code](https://github.com/J1dan/ImagiNav-release) · [Dataset](https://huggingface.co/datasets/J1dan/imaginav-dataset)
+
+<video src="/images/blog/imaginav/imaginav.mp4" autoPlay loop muted playsInline style={{ width: "100%", borderRadius: "12px" }} />
+
+*The authors' 4-second overview: instruction in, imagined video out, then a robot path. Source: [ImagiNav project page](https://j1dan.github.io/ImagiNav/).*
+
+---
+
+## The problem: robots need data that doesn't exist
+
+Vision-Language Navigation (VLN) is about robots following human instructions, like *"Walk down the corridor, turn right at the stairs, and enter the room at the end."* To do that, the robot has to understand the sentence, interpret what its camera sees, pick a route, and physically carry it out.
+
+The usual recipe is an **end-to-end policy**: a neural network that maps camera images plus an instruction directly to robot actions.
+
+```
+Image + instruction  →  Neural network  →  Action
+```
+
+This has two problems:
+
+1. **Expensive data.** You need many demonstrations of a robot doing the task, recording what it saw and which actions it took. That takes time, hardware, and people.
+2. **Poor transfer across robots.** A wheeled robot and a humanoid move differently, so a policy trained for one often doesn't work on the other.
+
+The common workaround is training in simulation, but simulated worlds have limited scene diversity and visual realism, so models trained there can struggle in unfamiliar real environments.
+
+### A few terms, in plain words
+
+- **Egocentric vision** means the view from the robot's own camera. It gives rich meaning ("that's the red door") without needing an exact map position.
+- **Metric localization** means estimating the robot's exact position and orientation in coordinates, distances, and angles. It's useful, but it can become unreliable when objects move, people block the camera, or sensors are noisy. The authors want navigation that doesn't depend *entirely* on it.
+- **High-level reasoning** is figuring out what needs to happen: "find the red door, pass it, turn left."
+- **Low-level control** is turning that plan into motion: move forward, adjust direction, rotate, stop.
+
+---
+
+## The data that is out there: egocentric videos
+
+There is a far more abundant resource than robot demonstrations: **in-the-wild egocentric videos**, such as someone filming themselves walking through a university building with a phone. They contain real lighting, real textures, doors, stairs, intersections, obstacles, and natural movement.
+
+The catch is that these videos have **no action labels**. A video can show a person walking forward and turning left, but it doesn't tell a robot which motor commands to send. Conventional policies need those labels, so this data usually goes unused.
+
+---
+
+## The shift: from action prediction to visual imagination
+
+ImagiNav's answer is to stop predicting actions directly. Instead:
+
+1. **Imagine** what the robot should *see* while following the instruction (generate a future video).
+2. **Measure** the camera motion in that imagined video to recover the movement.
+
+The key insight is that what an agent expects to see on its way to a goal is largely **embodiment-invariant**. A wheeled robot and a humanoid walking down the same hallway should see roughly the same thing, so the planner doesn't need to know anything about the robot's body.
+
+![ImagiNav framework overview](/images/blog/imaginav/imaginav.png)
+
+*ImagiNav's pipeline: the planner works in pixels and only the last step depends on the robot. Figure from the paper (Chen et al., 2026).*
+
+---
+
+## The pipeline, step by step
+
+**1. Task decomposition.** A pretrained Vision-Language Model (Gemini 3.0 Flash in the paper) looks at the current camera frame and the overall instruction and breaks the task into textual subgoals, like *"Move forward and turn left through the opening."*
+
+**2. Visual planning.** Given the current frame and the subgoal, a generative video model imagines the next stretch of the walk. The paper uses LTX-Video 2B, fine-tuned with LoRA on the collected walking videos. This imagined video *is* the plan.
+
+**3. Pixels to motion.** An **inverse dynamics model (IDM)**, here VGGT, looks at the generated frames and estimates how the camera moved between them. The output is a sequence of relative poses (Δx, Δy, Δθ). These are *scale-normalized*, so a low-level controller still has to apply scale calibration and the robot's kinematic limits.
+
+**4. Planning and control split.** The video generator is slow, so it runs as a **low-frequency planner**. A simple, fast controller tracks the decoded waypoints in between. The robot replans periodically with a fresh observation. In the paper's experiments the controller is just a heuristic proportional controller.
+
+---
+
+## The left/right problem and AC-MoE
+
+Standard video generators are trained for general video, not precise physical control, and they're known to confuse spatial directions. Ask for a left turn and you may get a right one, which for a robot means driving the wrong way.
+
+ImagiNav's fix is an **Action-Conditioned Mixture-of-Experts (AC-MoE)**. Think of a hospital: instead of one doctor treating everything, you route a patient to the right specialist. Here the "specialists" are two fine-tuned copies of the video model. Both handle forward motion, but one specializes in **left turns** and the other in **right turns**. At inference time, the reasoner reads the subgoal and **routes the generation to the matching expert**.
+
+In the paper's ablation, this beats a single model on both video quality (FVD) and motion fidelity. The authors are upfront that it's a **preliminary solution**: it reduces direction errors rather than eliminating them, and it adds the overhead of managing multiple experts.
+
+---
+
+## Under the hood (the technical bit)
+
+The planner is a function `G` that takes the current observation and the text instruction and predicts the next frames:
+
+```
+V_pred = G(I_t, L_t) = {I_t+1, ..., I_t+H}
+```
+
+- `G` is a Diffusion Transformer working in a compressed spatiotemporal latent space.
+- It's trained with **rectified flow matching**: a latent is gradually moved from random noise to a clean video latent by a learned velocity field, conditioned on the encoded start frame and the text.
+- A causal Video-VAE decoder turns the final latent back into pixels.
+- Unlike a normal policy, `V_pred` doesn't output control signals. The plan is encoded implicitly in the expected visual progression.
+
+---
+
+## The training trick: geometry first, language second
+
+If you just ask a language model to describe what happens in random walking videos, it gets directions and distances wrong ("spatial hallucinations"). So ImagiNav labels data in the opposite order:
+
+1. **Collect raw egocentric videos** and cut them into fixed-length clips.
+2. **Extract the motion first.** Run a pretrained IDM on the clips to estimate relative camera motion, then use a heuristic classifier to tag each clip as forward, turn left, turn right, or a compound movement.
+3. **Caption last.** An LLM writes the description *conditioned on that motion label*, so the text can't contradict the measured movement. Navigation verbs are mapped to camera terms ("move" becomes "dolly", "turn" becomes "pan") to match what video models saw in pretraining.
+
+No teleoperation, no localization hardware, no camera calibration. In the paper's pilot dataset, that was about **33 minutes** of iPhone video, which became **2,558 clips** of 121 frames after mirroring augmentation to balance left and right turns.
+
+A fair caveat: the motion labels are *estimated* by a pretrained model plus heuristics, so they're far better grounded than free-form VLM guesses, but not ground truth.
+
+![From human walking videos to training pairs](/images/blog/imaginav/datacollection.png)
+
+*Human videos, then motion priors, then semantic annotation, then training data. Figure from the authors' project page.*
+
+---
+
+## How it fits with related work
+
+- **VLN so far:** early work relied on reconstructed or synthetic scenes and simplified robot dynamics. Newer work adds large language models, but still depends heavily on (mostly simulated) robot data. More realistic simulators and web-scale video help, but still need precise state estimation for labeling or action supervision.
+- **Generative models in robotics:** video models are usually used as a *simulator* (what happens next?) or a *judge* (is this path good?). ImagiNav uses video generation as the **planner itself**.
+- **Inverse dynamics:** visual odometry and structure-from-motion normally answer "where am I?". ImagiNav uses the same idea to answer "what movement does this visual path imply?"
+
+---
+
+## What the results show
+
+Evaluation uses the VLN-PE benchmark (Isaac Sim, Unitree H1 humanoid, 100 InteriorNav episodes), entirely zero-shot.
+
+| Method | Training data | SR | SPL |
+| --- | --- | --- | --- |
+| InternVLA-N1 | ~1000h in-domain | 0.53 | 0.44 |
+| NavDP | ~101h sim | 0.32 | 0.31 |
+| ImagiNav-Sim | ~0.5h sim | 0.39 | 0.37 |
+| ImagiNav-Real | ~0.5h human video | 0.36 | 0.35 |
+
+- With about half an hour of human video and no robot data, ImagiNav-Real beats NavDP, which was trained on roughly 200x more data. The authors note that in this setup NavDP receives its goal coordinates from the VLM, which is a weakness of that pipeline.
+- InternVLA-N1 is still clearly ahead, as you'd expect from around 1000 hours of in-domain supervision.
+- The video-quality evaluation favors real data more clearly. The real-finetuned model gets an FVD of 65.4 vs. 72.7 and a Motion Fidelity of 0.72 vs. 0.67 compared to the sim-finetuned one, and the qualitative examples show it handling walkable paths and moving pedestrians better.
+
+---
+
+## What it looks like in practice
+
+The [project page](https://j1dan.github.io/ImagiNav/) shows the full loop on simulated homes, in five scenes: dining area, kitchen, bathroom, living area, and a far window. For each one you see the instruction, the **imagined** video, the **executed** video from the robot, and a **top-down map** comparing the reference path with the path the robot actually took.
+
+A typical instruction is: *"Turn left and move forward into the dining area, passing the wooden dining chair and table."* The video model was fine-tuned on almost no domestic scenes, yet it imagines plausible walks through these homes, and the inverse dynamics model turns each imagined video into poses the controller tracks. The close match between imagined and executed frames is the evidence that the plans are physically feasible for the controller.
+
+The page also has two qualitative comparisons I found convincing:
+
+- **Real vs. sim fine-tuning.** Starting from the same frame, the real-finetuned model stays clear of guardrails (better static geometry) and anticipates moving pedestrians, while the sim-finetuned model hallucinates unsafe paths and treats people as static objects.
+- **One frame, different instructions.** Given a single start frame, the real-finetuned model imagines a different, physically plausible route for "move forward", "move forward and turn left", and "move forward and turn right". Under the turn-left instruction it even steers slightly right first to get around a stone bench before turning.
+
+### Imagined, executed, and mapped
+
+Same scene, same instruction: first what the model imagines, then what the robot actually does, then the top-down map (red is the executed path, green is the reference).
+
+<div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "12px" }}>
+  <video src="/images/blog/imaginav/02_generated_video.mp4" autoPlay loop muted playsInline style={{ width: "100%", borderRadius: "12px" }} />
+  {/* If the next two are reversed, swap the file names. */}
+  <video src="/images/blog/imaginav/clip_20_30_4hz-598-19-left.mp4" autoPlay loop muted playsInline style={{ width: "100%", borderRadius: "12px" }} />
+  <video src="/images/blog/imaginav/clip_20_30_4hz-598-19-right.mp4" autoPlay loop muted playsInline style={{ width: "100%", borderRadius: "12px" }} />
+</div>
+
+*Left to right: imagined, executed, top-down map (dining-area scene).*
+
+### Real video vs. simulation, and one frame with different instructions
+
+<video src="/images/blog/imaginav/sim-real.mp4" controls loop muted playsInline preload="metadata" style={{ width: "100%", borderRadius: "12px" }} />
+
+*Ground truth, real-finetuned and sim-finetuned models on the same start frames.*
+
+<video src="/images/blog/imaginav/diverse.mp4" controls loop muted playsInline preload="metadata" style={{ width: "100%", borderRadius: "12px" }} />
+
+*One start frame, different instructions: each gets a different, physically plausible route.*
+
+### The authors' narrated overview
+
+<details>
+  <summary>Watch the 1 min 22 s overview video</summary>
+  <video src="/images/blog/imaginav/imaginav-video.mp4" controls preload="none" style={{ width: "100%", borderRadius: "12px" }} />
+</details>
+
+*All figures and videos in this post are from the paper and project page by Chen et al. (IROS 2026) and belong to the authors. They are shown here with credit for discussion; see the [project page](https://j1dan.github.io/ImagiNav/) for the originals.*
+
+---
+
+## My take
+
+**What I like**
+
+- The decoupling is elegant. Planning in pixel space and grounding it with geometry means any unlabeled egocentric video becomes training data.
+- The generated plans are interpretable. You can literally watch what the robot intends to do.
+- The geometry-first labeling is a practical idea beyond this paper.
+
+**What I'd question**
+
+- In the actual navigation benchmark, the sim-trained variant is *slightly better* than the real-trained one (SR 0.39 vs. 0.36). The real-data advantage shows up in video quality metrics, not in navigation success. The paper's argument is that the gap is small, which is fair, but "real data beats sim" is better supported for video generation than for navigation.
+- The evaluation is only in simulation, on 100 episodes. The abstract talks about zero-shot transfer to robot navigation, but there is no real-robot experiment yet.
+- Latency is the big practical limit. Video generation is expensive, so the system replans at low frequency and can't react quickly to sudden hazards. The authors also flag geometric hallucinations (plans that look plausible but aren't physically safe) and propose distilling the model into a fast policy as future work.
+
+{/* TODO: add your own angle here, e.g. how this connects to your interest in generative models or your GenSign work on diffusion. */}
+
+---
+
+## Takeaway
+
+ImagiNav doesn't beat the best supervised model, and it isn't validated on real hardware yet. But as a proof of concept it's compelling: a small amount of unlabeled human video, a generative model, and an off-the-shelf pose estimator can produce a working navigation planner. If the latency problem gets solved, "watching people walk" could become a serious data source for robotics.
+
+---
+
+## References
+
+- Chen et al., *ImagiNav: Scalable Embodied Navigation via Generative Visual Prediction and Inverse Dynamics*, IROS 2026, arXiv:2603.13833. [Paper](https://arxiv.org/abs/2603.13833) · [Project page](https://j1dan.github.io/ImagiNav/) · [Code](https://github.com/J1dan/ImagiNav-release) · [Dataset](https://huggingface.co/datasets/J1dan/imaginav-dataset)
+
+**Figures and videos:** © the authors, from the [project page](https://j1dan.github.io/ImagiNav/) and the paper.
+
+**Open-source building blocks the authors credit:** [InternNav](https://github.com/InternRobotics/InternNav/tree/main) (baselines, the VLN-PE benchmark, simulation), [LTX-Video](https://github.com/Lightricks/LTX-Video) (the pretrained video model), [VGGT](https://github.com/facebookresearch/vggt) (the pretrained inverse dynamics model), and [CD-FVD](https://github.com/songweige/content-debiased-fvd) (Fréchet Video Distance evaluation).
+
+```bibtex
+@inproceedings{chen2026imaginav,
+  author    = {Chen, Jie and Cai, Yuxin and Wang, Yizhuo and Bai, Ruofei and
+               Cao, Yuhong and Li, Jun and Yau, Wei-Yun and Sartoretti, Guillaume},
+  title     = {{ImagiNav: Scalable Embodied Navigation Via Generative Visual
+               Prediction and Inverse Dynamics}},
+  booktitle = {2026 IEEE/RSJ International Conference on Intelligent Robots
+               and Systems (IROS)},
+  year      = {2026}
+}

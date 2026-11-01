@@ -20,6 +20,15 @@ export type Post = {
 }
 
 const registry: Omit<Post, "content">[] = [
+    {
+    slug: "navigation-as-video-generation",
+    title: "Don't Predict the Action, Imagine the Future: Navigation as Video Generation",
+    summary: "How ImagiNav lets a robot learn to navigate from 33 minutes of smartphone footage, and what the results do and don't prove.",
+    date: "2026-10-31",
+    category: "Tech & AI",
+    tags: ["Robotics", "Video Generation", "Vision-Language Navigation", "Paper Review"],
+    platform: "Portfolio",
+  },
   {
     slug: "the-average-of-two-signs-is-not-a-sign",
     title: "The Average of Two Signs Is Not a Sign: Building a Text-to-ASL Generator with Diffusion Models",
