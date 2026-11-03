@@ -1,0 +1,153 @@
+---
+title: "Generalized Policy Iteration: A Tiny GridWorld Experiment"
+description: "Inspired by Sutton and Barto's explanation of Generalized Policy Iteration, a hands-on experiment exploring how policy evaluation and improvement can interact at different update frequencies."
+date: "2026-11-03"
+---
+
+One passage from Richard Sutton and Andrew Barto's _Reinforcement Learning: An Introduction_ caught my attention:
+
+> "[GPI refers] to the general idea of letting policy evaluation and policy improvement processes interact, independent of the granularity and other details of the two processes. Almost all reinforcement learning methods are well described as GPI."
+
+What I found particularly interesting was the idea that policy evaluation and policy improvement do not need to happen at a fixed pace or in clearly separated stages. They can interact at different frequencies, and that interaction is at the heart of many reinforcement learning algorithms.
+
+I wanted to make this idea a little more concrete. So, inspired by that passage, I built a small GridWorld experiment to compare two ways of scheduling value updates and policy changes.
+
+**Explore the experiment:** [GitHub repository](https://github.com/sarrazer24/gpi-gridworld-experiment) · [Kaggle notebook](https://www.kaggle.com/code/sarraverse/gpi-gridworld-multiseed?scriptVersionId=365281433)
+
+## A quick refresher: evaluation and improvement
+
+**Policy evaluation** estimates how well the current policy performs. In value-based methods, this involves estimating state values or action values.
+
+**Policy improvement** uses those estimates to make the policy better. For example, an agent may choose actions greedily—or ε-greedily—with respect to its current action-value estimates.
+
+The two processes form a feedback loop:
+
+1. Estimate how good the current behavior is.
+2. Use those estimates to improve the policy.
+3. Collect experience under the updated behavior.
+4. Refine the estimates and repeat.
+
+The important point is that these processes can interact at different speeds. An algorithm can make updates after every transition, or it can collect experience for a while before updating its estimates and changing its policy.
+
+## The experiment: a 5×5 GridWorld
+
+I used a small deterministic 5×5 GridWorld. The agent starts in the top-left corner and must reach the goal in the bottom-right corner. Three cells are blocked.
+
+![The 5×5 GridWorld environment, showing the starting position, goal, and blocked cells.](/images/blog/gpi_gridworld/gridworld-environment.png)
+
+The reward structure is deliberately simple:
+
+- Each move gives a reward of −1.
+- Reaching the goal gives +10.
+- An episode ends when the goal is reached or the 50-step limit is reached.
+
+A shortest successful route takes eight moves, giving a total return of +3: seven moves with a reward of −1, followed by the goal-reaching move with a reward of +10.
+
+## Two update schedules
+
+Both approaches use tabular Q-learning, the same environment, and the same learning hyperparameters.
+
+**1. Interleaved updates**
+
+The agent updates its Q-values immediately after every transition. Its next action can therefore respond to the latest estimates.
+
+**2. Alternating batches**
+
+At the beginning of each batch, the agent derives a greedy policy from its current Q-values. It then collects ten episodes using that fixed greedy policy with ε-greedy exploration. Once the batch is complete, it updates the Q-values using the collected transitions. The next batch uses the newly derived policy.
+
+Both schedules involve learning value estimates and improving behavior. This is not a comparison of GPI against a non-GPI method; it is a comparison of two different ways to coordinate updates and policy changes.
+
+## Experimental setup
+
+To avoid drawing conclusions from a single lucky run, I repeated the experiment across ten random seeds.
+
+Each method was trained for 500 episodes per seed, giving 5,000 training episodes per method across all seeds. I evaluated the greedy policy every 50 training episodes, without exploration, and recorded:
+
+- **Success rate:** how often the agent reached the goal.
+- **Average episode length:** the number of steps taken per episode.
+- **Average return:** the cumulative reward per episode.
+
+Each evaluation checkpoint used 100 episodes per seed. The notebook plots the mean and standard deviation across seeds.
+
+**Reproducibility:** Explore the implementation and results:
+
+- [GitHub repository](YOUR_GITHUB_REPOSITORY_URL)
+- [Open the complete Kaggle notebook](https://www.kaggle.com/code/sarraverse/gpi-gridworld-multiseed?scriptVersionId=365234930)
+
+## Results
+
+Both methods eventually learned a successful greedy policy in every evaluated episode.
+
+| Metric              | Interleaved updates | Alternating batches |
+| ------------------- | ------------------: | ------------------: |
+| Mean return         |         3.00 ± 0.00 |         3.00 ± 0.00 |
+| Mean episode length |         8.00 ± 0.00 |         8.00 ± 0.00 |
+| Success rate        |       100.0% ± 0.0% |       100.0% ± 0.0% |
+
+These values are means ± standard deviations across the ten random seeds. Each final policy was evaluated over 100 episodes per seed.
+
+The final results are identical: both methods consistently found the shortest route and achieved the maximum return available under this reward structure.
+
+However, final performance is only part of the picture. The learning curves provide a more useful view of how the methods developed during training.
+
+### Success rate
+
+The success-rate curve tracks how often each method reaches the goal at each evaluation checkpoint.
+
+![Success rate across training checkpoints, showing mean performance and standard deviation across ten seeds.](/images/blog/gpi_gridworld/success-rate.png)
+
+### Episode length
+
+Episode length provides another perspective. Once the agent learns the shortest route, successful episodes should take eight steps.
+
+![Mean episode length across training checkpoints, with standard deviation across ten seeds.](/images/blog/gpi_gridworld/episode-length.png)
+
+### Mean return
+
+Mean return combines the effect of reaching the goal and the number of steps taken. In this environment, a shortest successful episode produces a return of +3.
+
+![Mean episode return across training checkpoints, with standard deviation across ten seeds.](/images/blog/gpi_gridworld/mean-return.png)
+
+The final metrics show that both methods reached the same performance. The intermediate curves are useful for examining their learning trajectories, but the final result alone does not establish that one schedule is generally more sample-efficient than the other.
+
+## What does this tell us about GPI?
+
+The experiment is a small illustration of the flexibility of Generalized Policy Iteration.
+
+The interleaved schedule allows value updates and behavioral adaptation to happen frequently. The alternating schedule separates experience collection and value updates into batches, so the policy remains fixed during each collection phase.
+
+The notebook also visualizes the learned policies for one seed:
+
+![Learned greedy policies for the interleaved and alternating-batch methods.](/images/blog/gpi_gridworld/learned-policies.png)
+
+Neither schedule should be expected to win in every environment. The outcome depends on the environment, exploration, hyperparameters, and the details of the learning procedure.
+
+There is also an important technical nuance: **Q-learning is an off-policy control algorithm.** Its update target uses the maximum estimated action value at the next state:
+
+`Q(s,a) ← Q(s,a) + α [r + γ maxₐ′ Q(s′,a′) − Q(s,a)]`
+
+It is therefore not the same as explicitly evaluating a fixed policy using a policy-evaluation algorithm. I use Q-learning here as a compact value-based example of learning and policy improvement interacting, rather than as a direct implementation of classical policy iteration.
+
+## Limitations
+
+This experiment is intentionally small and should be interpreted accordingly:
+
+- The environment is deterministic and tabular.
+- Only one map and one reward design are considered.
+- The schedules differ in both update timing and within-batch policy behavior.
+- Ten random seeds offer a better view than one run, but do not establish a universal performance ranking.
+- The results cannot be generalized directly to deep reinforcement learning or more complex environments.
+
+## Final thought
+
+That passage from Sutton and Barto was what inspired this experiment in the first place. It made me look beyond individual update rules and focus on the broader relationship between learning how well a policy performs and using that knowledge to improve it.
+
+This tiny GridWorld does not capture the complexity of real-world reinforcement learning, but it helped me make that relationship more tangible.
+
+Whether evaluation and improvement interact after every transition or after a batch of experience, their relationship remains central to how many reinforcement learning methods work.
+
+Sometimes, understanding that underlying idea is more valuable than memorizing another update rule.
+
+## Reference
+
+Sutton, R. S., & Barto, A. G. (2018). _Reinforcement Learning: An Introduction_ (2nd ed.). MIT Press, Chapter 4, “Dynamic Programming.” [Book website](http://incompleteideas.net/book/bookdraft2018jan1.pdf).
