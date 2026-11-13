@@ -18,5 +18,6 @@ export default async function OpenGraphImage({ params }: Props) {
     eyebrow: "Sarraverse · Research notes",
     title: post.title,
     description: post.summary,
+    tags: post.tags,
   })
 }

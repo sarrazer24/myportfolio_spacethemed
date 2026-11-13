@@ -11,5 +11,6 @@ export default function OpenGraphImage() {
     title: "Khayra Sarra Zerguerras",
     description:
       "Exploring trustworthy AI, LLM security, and the systems behind intelligent technology.",
+    tags: ["AI Safety", "LLM Security", "Trustworthy AI"],
   })
 }
