@@ -24,8 +24,8 @@ const registry: Omit<Post, "content">[] = [
 
   {
     slug: "cbus-reproduction-budget",
-    title: "Can You Tell an LLM to Act Like a 5th Grader? Reproducing CBUS on a Budget",
-    summary: "A from-scratch reproduction of a paper on cognitively bounded LLM user simulators. Testing what its metrics actually reward, exploring capacity constraints, and examining the implications for AI safety.",
+    title: "Can an LLM Act Like a 5th Grader? Reproducing CBUS",
+    summary: "I reproduce CBUS, a cognitively bounded LLM user simulator, to test its metrics, capacity limits, and AI safety implications.",
     date: "2026-11-13",
     category: "Tech & AI",
     tags: [

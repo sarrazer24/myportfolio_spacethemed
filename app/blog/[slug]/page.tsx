@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const image = `/blog/${post.slug}/opengraph-image`
   return {
-    title: `${post.title} - Khayra Sarra Zerguerras`,
+    title: post.title,
     description: post.summary,
     alternates: {
       canonical: `/blog/${post.slug}`,
@@ -25,7 +25,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: post.title,
       description: post.summary,
       url: `/blog/${post.slug}`,
+      siteName: "Sarra Zerguerras Portfolio",
       type: "article",
+      images: [image],
     },
     twitter: {
       card: "summary_large_image",
