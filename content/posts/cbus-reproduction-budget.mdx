@@ -18,6 +18,8 @@ I decided to reproduce the paper's approach from scratch, using a small open-wei
 
 **Explore my reproduction:** [CBUS reproduction on GitHub](https://github.com/sarrazer24/cbus-repro)
 
+---
+
 ## The paper: why persona prompting is not enough
 
 Balog and Bakken (EMNLP Findings 2026, arXiv:2608.30033) investigate whether LLMs can simulate the reading comprehension abilities of real students.
@@ -45,6 +47,8 @@ The important difference is that the model no longer has access to the entire so
 
 The paper reports that this approach substantially improves the similarity between simulated and real student performance. Its random-dropout ablation also performs comparably, suggesting that restricting information capacity is more important than precisely which propositions are retained.
 
+---
+
 ## My reproduction: working with limited resources
 
 I wanted to reproduce the main approach and investigate whether the reported findings would hold under more constrained conditions.
@@ -64,6 +68,8 @@ This is not one of the backbones used in the original paper. The goal was not to
 
 I also wrote my evaluation criteria before running the main experiments, so that I could report failures as well as successful results.
 
+---
+
 ## Step 1: reproducing the paper's evaluation metrics
 
 Before running my own simulations, I wanted to make sure my implementation of the evaluation metrics was correct.
@@ -79,16 +85,18 @@ Several implementation details mattered:
 
 I compared my results against the authors' reported aggregates, using the mean of their three runs per condition.
 
-| Row (Llama-3.3-70B)    | Abs. gap |   JSD |   ECE | Pearson | Spearman |
+| Row (Llama-3.3-70B) | Abs. gap | JSD | ECE | Pearson | Spearman |
 | ---------------------- | -------: | ----: | ----: | ------: | -------: |
-| Persona baseline       |    0.279 | 0.679 | 0.285 |   0.241 |    0.179 |
-| CBUS-TS, C = 2         |    0.238 | 0.475 | 0.244 |   0.455 |    0.304 |
-| CBUS-SPR, C = 4        |    0.037 | 0.093 | 0.069 |   0.301 |    0.297 |
-| Held-out real students |    0.026 | 0.006 | 0.027 |   0.895 |    0.845 |
+| Persona baseline | 0.279 | 0.679 | 0.285 | 0.241 | 0.179 |
+| CBUS-TS, C = 2 | 0.238 | 0.475 | 0.244 | 0.455 | 0.304 |
+| CBUS-SPR, C = 4 | 0.037 | 0.093 | 0.069 | 0.301 | 0.297 |
+| Held-out real students | 0.026 | 0.006 | 0.027 | 0.895 | 0.845 |
 
 **All values matched the authors' released aggregates to three decimal places.**
 
 This gave me confidence that the metric calculations were implemented consistently before moving on to my own experiments.
+
+---
 
 ## Step 2: what do the metrics actually reward?
 
@@ -100,12 +108,12 @@ I was particularly interested in whether a simulator that matches the overall sc
 
 Using histogram midpoints to estimate the standard deviation of student scores, I obtained:
 
-| Population       | Score standard deviation |
+| Population | Score standard deviation |
 | ---------------- | -----------------------: |
-| Real students    |                     0.17 |
-| Random guessing  |                     0.12 |
-| Persona baseline |                     0.04 |
-| CBUS-SPR         |                     0.11 |
+| Real students | 0.17 |
+| Random guessing | 0.12 |
+| Persona baseline | 0.04 |
+| CBUS-SPR | 0.11 |
 
 CBUS-SPR substantially improves the score spread compared with persona prompting, but it still does not fully reproduce the variation observed among real students.
 
@@ -122,10 +130,10 @@ I tested two simple predictors:
 
 Their results were:
 
-| Predictor                 | Pearson | Spearman |
+| Predictor | Pearson | Spearman |
 | ------------------------- | ------: | -------: |
-| Question-format predictor |   0.523 |    0.339 |
-| Chance-level predictor    |   0.458 |    0.370 |
+| Question-format predictor | 0.523 | 0.339 |
+| Chance-level predictor | 0.458 | 0.370 |
 
 For comparison, the paper's best simulator reaches 0.455 Pearson (CBUS-TS, Llama) and 0.370 Spearman (CBUS-SPR, Mixtral).
 
@@ -163,10 +171,10 @@ I evaluated the random control at different population sizes:
 
 | Simulated students | Responses per question | Random control Pearson | Random control JSD |
 | -----------------: | ---------------------: | ---------------------: | -----------------: |
-|                100 |                    4.6 |                   0.20 |               0.67 |
-|                300 |                   13.9 |                   0.35 |               0.63 |
-|                700 |                   32.1 |                   0.42 |               0.61 |
-|               1200 |                   55.0 |                   0.42 |               0.61 |
+| 100 | 4.6 | 0.20 | 0.67 |
+| 300 | 13.9 | 0.35 | 0.63 |
+| 700 | 32.1 | 0.42 | 0.61 |
+| 1200 | 55.0 | 0.42 | 0.61 |
 
 Even a random predictor can produce substantial item-level correlations when the sample is small.
 
@@ -179,13 +187,15 @@ For reference, the expected JSD between an identical population and a finite sam
 
 | Sample size | Approximate JSD |
 | ----------: | --------------: |
-|          50 |           0.068 |
-|         100 |           0.034 |
-|         200 |           0.018 |
-|         500 |           0.007 |
-|        1198 |           0.003 |
+| 50 | 0.068 |
+| 100 | 0.034 |
+| 200 | 0.018 |
+| 500 | 0.007 |
+| 1198 | 0.003 |
 
 This helped me avoid interpreting differences caused by sampling as meaningful improvements in simulation quality.
+
+---
 
 ## My experiments with Qwen2.5-7B-Instruct
 
@@ -195,16 +205,16 @@ With the evaluation pipeline checked, I moved on to my own experiments.
 
 The main configuration was:
 
-| Parameter          | Setting                                |
+| Parameter | Setting |
 | ------------------ | -------------------------------------- |
-| Model              | Qwen2.5-7B-Instruct                    |
-| Inference          | vLLM, FP16                             |
-| Hardware           | 2 × NVIDIA T4                          |
-| Temperature        | 1.4                                    |
-| Synthetic students | 300 per condition                      |
-| Exposure           | Approximately 7 texts per student      |
-| Main seeds         | 0 and 1                                |
-| Output limit       | 400 tokens for seed 0; 1000 for seed 1 |
+| Model | Qwen2.5-7B-Instruct |
+| Inference | vLLM, FP16 |
+| Hardware | 2 × NVIDIA T4 |
+| Temperature | 1.4 |
+| Synthetic students | 300 per condition |
+| Exposure | Approximately 7 texts per student |
+| Main seeds | 0 and 1 |
+| Output limit | 400 tokens for seed 0; 1000 for seed 1 |
 
 The temperature follows the authors' setting. The option format, using lines such as "A. ...", was my own implementation choice.
 
@@ -216,18 +226,18 @@ One additional detail: the seed-0 main runs used a 400-token output limit, while
 
 I evaluated five conditions across two seeds.
 
-| Condition               | Seed | Mean acc | Score SD | Abs. gap |   JSD |   ECE | Pearson | Spearman | Dropped % |
+| Condition | Seed | Mean acc | Score SD | Abs. gap | JSD | ECE | Pearson | Spearman | Dropped % |
 | ----------------------- | ---: | -------: | -------: | -------: | ----: | ----: | ------: | -------: | --------: |
-| Random control          |    0 |    0.366 |    0.089 |    0.321 | 0.627 | 0.316 |   0.354 |    0.319 |         0 |
-| Random control          |    1 |    0.376 |    0.086 |    0.311 | 0.619 | 0.303 |   0.315 |    0.253 |         0 |
-| Persona baseline        |    0 |    0.897 |    0.056 |    0.210 | 0.451 | 0.214 |   0.267 |    0.219 |         0 |
-| Persona baseline        |    1 |    0.895 |    0.054 |    0.208 | 0.446 | 0.213 |   0.262 |    0.213 |         0 |
-| CBUS-SPR, C = 4         |    0 |    0.617 |    0.080 |    0.070 | 0.231 | 0.103 |   0.240 |    0.240 |       1.7 |
-| CBUS-SPR, C = 4         |    1 |    0.612 |    0.084 |    0.075 | 0.224 | 0.105 |   0.243 |    0.241 |       1.8 |
-| CBUS-TS, C = 2          |    0 |    0.809 |    0.081 |    0.122 | 0.218 | 0.126 |   0.379 |    0.315 |       1.2 |
-| CBUS-TS, C = 2          |    1 |    0.803 |    0.082 |    0.116 | 0.217 | 0.123 |   0.386 |    0.344 |       1.4 |
-| SPR with random dropout |    0 |    0.580 |    0.094 |    0.107 | 0.215 | 0.130 |   0.226 |    0.204 |       4.9 |
-| SPR with random dropout |    1 |    0.580 |    0.091 |    0.107 | 0.237 | 0.129 |   0.230 |    0.205 |       3.2 |
+| Random control | 0 | 0.366 | 0.089 | 0.321 | 0.627 | 0.316 | 0.354 | 0.319 | 0 |
+| Random control | 1 | 0.376 | 0.086 | 0.311 | 0.619 | 0.303 | 0.315 | 0.253 | 0 |
+| Persona baseline | 0 | 0.897 | 0.056 | 0.210 | 0.451 | 0.214 | 0.267 | 0.219 | 0 |
+| Persona baseline | 1 | 0.895 | 0.054 | 0.208 | 0.446 | 0.213 | 0.262 | 0.213 | 0 |
+| CBUS-SPR, C = 4 | 0 | 0.617 | 0.080 | 0.070 | 0.231 | 0.103 | 0.240 | 0.240 | 1.7 |
+| CBUS-SPR, C = 4 | 1 | 0.612 | 0.084 | 0.075 | 0.224 | 0.105 | 0.243 | 0.241 | 1.8 |
+| CBUS-TS, C = 2 | 0 | 0.809 | 0.081 | 0.122 | 0.218 | 0.126 | 0.379 | 0.315 | 1.2 |
+| CBUS-TS, C = 2 | 1 | 0.803 | 0.082 | 0.116 | 0.217 | 0.123 | 0.386 | 0.344 | 1.4 |
+| SPR with random dropout | 0 | 0.580 | 0.094 | 0.107 | 0.215 | 0.130 | 0.226 | 0.204 | 4.9 |
+| SPR with random dropout | 1 | 0.580 | 0.091 | 0.107 | 0.237 | 0.129 | 0.230 | 0.205 | 3.2 |
 
 For reference, real students have a mean accuracy of 0.685 and a score standard deviation of 0.173.
 
@@ -272,11 +282,11 @@ Each simulated student answers approximately 34 questions.
 
 If all simulated students have the same underlying ability, a simple binomial reference gives the following expected standard deviations:
 
-| Condition                | Observed SD | Binomial reference |
+| Condition | Observed SD | Binomial reference |
 | ------------------------ | ----------: | -----------------: |
-| Random control, seed 0   |       0.089 |              0.082 |
-| Persona baseline, seed 0 |       0.056 |              0.052 |
-| SPR, C = 4, seed 0       |       0.080 |              0.083 |
+| Random control, seed 0 | 0.089 | 0.082 |
+| Persona baseline, seed 0 | 0.056 | 0.052 |
+| SPR, C = 4, seed 0 | 0.080 | 0.083 |
 
 The observed variation is close to this simple reference.
 
@@ -297,19 +307,21 @@ Its dropped-response rate is also higher, ranging from 3.2% to 4.9%, compared wi
 
 The difference in output limits may partly explain the change in dropped responses, but I did not isolate truncation as a separate variable.
 
+---
+
 ## Pre-specified evaluation criteria
 
 Before running the experiments, I defined five criteria to evaluate the reproduction.
 
 These thresholds were originally chosen with larger models in mind. I kept them unchanged when evaluating the smaller model rather than adjusting them to make the results look better.
 
-| ID  | Criterion                                              | Seed 0                            | Seed 1                            | Result           |
+| ID | Criterion | Seed 0 | Seed 1 | Result |
 | --- | ------------------------------------------------------ | --------------------------------- | --------------------------------- | ---------------- |
-| C1  | Baseline accuracy ≥ 0.90 and score SD ≤ 0.06           | 0.897, 0.056                      | 0.895, 0.054                      | Fail on accuracy |
-| C2  | SPR gap ≤ 0.15 and JSD ≤ half of baseline              | Gap 0.070; JSD ratio 0.51         | Gap 0.075; JSD ratio 0.50         | Narrow fail      |
-| C3  | TS gap > 0.15 and TS Pearson > baseline Pearson        | Gap 0.122; Pearson 0.379 vs 0.267 | Gap 0.116; Pearson 0.386 vs 0.262 | Fail             |
-| C4  | Dropout JSD within 0.03 of SPR JSD                     | Difference 0.016                  | Difference 0.013                  | Pass             |
-| C5  | 7B baseline is not closer to students than 3B baseline | Baseline and SPR comparisons      | Not run                           | Mixed            |
+| C1 | Baseline accuracy ≥ 0.90 and score SD ≤ 0.06 | 0.897, 0.056 | 0.895, 0.054 | Fail on accuracy |
+| C2 | SPR gap ≤ 0.15 and JSD ≤ half of baseline | Gap 0.070; JSD ratio 0.51 | Gap 0.075; JSD ratio 0.50 | Narrow fail |
+| C3 | TS gap > 0.15 and TS Pearson > baseline Pearson | Gap 0.122; Pearson 0.379 vs 0.267 | Gap 0.116; Pearson 0.386 vs 0.262 | Fail |
+| C4 | Dropout JSD within 0.03 of SPR JSD | Difference 0.016 | Difference 0.013 | Pass |
+| C5 | 7B baseline is not closer to students than 3B baseline | Baseline and SPR comparisons | Not run | Mixed |
 
 A few details are worth highlighting.
 
@@ -321,18 +333,20 @@ A few details are worth highlighting.
 
 I found it useful to report these failures explicitly. A reproduction should not become a process of changing the success criteria until the results look convincing.
 
+---
+
 ## Does model size change the picture?
 
 I also tested Qwen2.5-3B-Instruct to investigate whether a smaller model would behave more like real students.
 
 This was a single seed-0 run, using the same general setup and a 1000-token output limit.
 
-| Condition        | Model | Mean acc | Score SD | Abs. gap |   JSD |   ECE | Pearson | Spearman | Dropped % |
+| Condition | Model | Mean acc | Score SD | Abs. gap | JSD | ECE | Pearson | Spearman | Dropped % |
 | ---------------- | ----- | -------: | -------: | -------: | ----: | ----: | ------: | -------: | --------: |
-| Persona baseline | 3B    |    0.822 |    0.068 |    0.135 | 0.281 | 0.141 |   0.310 |    0.233 |       0.1 |
-| Persona baseline | 7B    |    0.897 |    0.056 |    0.210 | 0.451 | 0.214 |   0.267 |    0.219 |         0 |
-| CBUS-SPR, C = 4  | 3B    |    0.561 |    0.090 |    0.125 | 0.251 | 0.138 |   0.243 |    0.219 |      11.6 |
-| CBUS-SPR, C = 4  | 7B    |    0.617 |    0.080 |    0.070 | 0.231 | 0.103 |   0.240 |    0.240 |       1.7 |
+| Persona baseline | 3B | 0.822 | 0.068 | 0.135 | 0.281 | 0.141 | 0.310 | 0.233 | 0.1 |
+| Persona baseline | 7B | 0.897 | 0.056 | 0.210 | 0.451 | 0.214 | 0.267 | 0.219 | 0 |
+| CBUS-SPR, C = 4 | 3B | 0.561 | 0.090 | 0.125 | 0.251 | 0.138 | 0.243 | 0.219 | 11.6 |
+| CBUS-SPR, C = 4 | 7B | 0.617 | 0.080 | 0.070 | 0.231 | 0.103 | 0.240 | 0.240 | 1.7 |
 
 Under persona prompting, the smaller model is closer to the real students.
 
@@ -350,19 +364,21 @@ There are important caveats. Each comparison is based on one run, and the 3B SPR
 
 Still, this comparison suggests that the effect of model size can depend on the simulation procedure, rather than following one simple relationship.
 
+---
+
 ## How much information should a simulated student retain?
 
 The paper uses C = 4 for SPR, but I wanted to investigate how sensitive the results were to this choice.
 
 I ran a capacity sweep using the 7B model, with one run per capacity value.
 
-|   C | Mean acc | Abs. gap |   JSD |   ECE | Pearson | Spearman | Dropped % |
+| C | Mean acc | Abs. gap | JSD | ECE | Pearson | Spearman | Dropped % |
 | --: | -------: | -------: | ----: | ----: | ------: | -------: | --------: |
-|   2 |    0.564 |    0.123 | 0.249 | 0.142 |   0.200 |    0.179 |       7.7 |
-|   4 |    0.617 |    0.070 | 0.231 | 0.103 |   0.240 |    0.240 |       1.7 |
-|   6 |    0.651 |    0.036 | 0.177 | 0.095 |   0.256 |    0.254 |       2.0 |
-|   8 |    0.667 |    0.019 | 0.176 | 0.088 |   0.262 |    0.264 |       2.8 |
-|  12 |    0.706 |    0.019 | 0.178 | 0.075 |   0.285 |    0.290 |       2.7 |
+| 2 | 0.564 | 0.123 | 0.249 | 0.142 | 0.200 | 0.179 | 7.7 |
+| 4 | 0.617 | 0.070 | 0.231 | 0.103 | 0.240 | 0.240 | 1.7 |
+| 6 | 0.651 | 0.036 | 0.177 | 0.095 | 0.256 | 0.254 | 2.0 |
+| 8 | 0.667 | 0.019 | 0.176 | 0.088 | 0.262 | 0.264 | 2.8 |
+| 12 | 0.706 | 0.019 | 0.178 | 0.075 | 0.285 | 0.290 | 2.7 |
 
 ### Visualizing the effect of capacity
 
@@ -382,6 +398,8 @@ One possible explanation is that the optimal capacity depends on the baseline st
 
 However, this is a hypothesis rather than an established conclusion. The sweep uses only one seed per capacity, and I have not tested the explanation across additional backbones.
 
+---
+
 ## Extension: giving each student a different capacity
 
 So far, each simulated student in an SPR condition has shared the same capacity parameter.
@@ -392,11 +410,11 @@ I wanted to see what would happen if each simulated student received a different
 
 For this extension, each student independently draws C uniformly from 2 to 6.
 
-| Variant                   | Mean acc | Score SD | Abs. gap |   JSD |   ECE | Pearson |
+| Variant | Mean acc | Score SD | Abs. gap | JSD | ECE | Pearson |
 | ------------------------- | -------: | -------: | -------: | ----: | ----: | ------: |
-| SPR, fixed C = 4 (seed 0) |    0.617 |    0.080 |    0.070 | 0.231 | 0.103 |   0.240 |
-| SPR, fixed C = 4 (seed 1) |    0.612 |    0.084 |    0.075 | 0.224 | 0.105 |   0.243 |
-| SPR, C drawn from 2 to 6  |    0.617 |    0.090 |    0.070 | 0.195 | 0.111 |   0.230 |
+| SPR, fixed C = 4 (seed 0) | 0.617 | 0.080 | 0.070 | 0.231 | 0.103 | 0.240 |
+| SPR, fixed C = 4 (seed 1) | 0.612 | 0.084 | 0.075 | 0.224 | 0.105 | 0.243 |
+| SPR, C drawn from 2 to 6 | 0.617 | 0.090 | 0.070 | 0.195 | 0.111 | 0.230 |
 
 The variable-capacity version produces a JSD of 0.195, compared with 0.231 for the fixed-capacity seed-0 run.
 
@@ -407,6 +425,8 @@ The score standard deviation increases from approximately 0.08 to 0.09, but rema
 There is another important limitation: this extension uses only one run. The improvement in JSD is larger than the difference between the two fixed-capacity seeds, but that is not enough to establish that variable capacity is consistently better.
 
 Still, it is an interesting direction to explore further. Giving simulated users heterogeneous cognitive constraints may be more realistic than assigning every individual the same limitation.
+
+---
 
 ## What does this mean for AI safety?
 
@@ -456,6 +476,8 @@ This could lead to evaluations that overestimate an agent's reliability or under
 
 The broader lesson is that **a simulator should be evaluated on the behavior it reproduces, not simply on whether it follows its assigned persona.**
 
+---
+
 ## Limitations
 
 This reproduction has several limitations that are important when interpreting the results:
@@ -471,6 +493,8 @@ This reproduction has several limitations that are important when interpreting t
 - **Metric reproduction versus new experiments:** The authors' released aggregates were used to verify my metric calculations, not to reproduce their original experimental conditions.
 
 These limitations mean that the results should be interpreted as a small-scale reproduction and exploratory investigation, not as a complete replication of the original study.
+
+---
 
 ## Final thoughts
 
@@ -488,10 +512,22 @@ Working with a 7B model on free GPU resources meant that I could not reproduce e
 
 **Ultimately, I took away a broader lesson: when evaluating AI systems, we should be careful about what our metrics actually measure and whether the behavior we are testing is the behavior we intended to reproduce.**
 
+---
+
 ## References
 
-Balog, K., & Bakken, J. (2026). *["Act Like a 5th Grader" is Not Enough: Bounding Knowledge in LLM-Based User Simulators](https://arxiv.org/abs/2608.30033).* EMNLP Findings 2026.
+**Original paper:**
 
-**Original implementation and data:** [Authors' GitHub repository](https://github.com/iai-group/emnlp2026-simreading). The authors' data is licensed separately and is not redistributed here.
+Balog, K., & Bakken, A. M. (2026). ["Act Like a 5th Grader" is Not Enough: Bounding Knowledge in LLM-Based User Simulators](https://aclanthology.org/2026.findings-emnlp.2367/). *Findings of the Association for Computational Linguistics: EMNLP 2026*, 50860–50878.
 
-**My implementation:** [CBUS reproduction on GitHub](https://github.com/sarrazer24/cbus-repro).
+- [Read the paper (PDF)](https://arxiv.org/pdf/2608.30033)
+- [arXiv abstract](https://arxiv.org/abs/2608.30033)
+- [ACL Anthology publication](https://aclanthology.org/2026.findings-emnlp.2367.pdf)
+
+**Original implementation and data:**
+
+[Authors' GitHub repository](https://github.com/iai-group/emnlp2026-simreading). The authors' data is licensed separately and is not redistributed in my reproduction.
+
+**My implementation:**
+
+[CBUS reproduction on GitHub](https://github.com/sarrazer24/cbus-repro).
