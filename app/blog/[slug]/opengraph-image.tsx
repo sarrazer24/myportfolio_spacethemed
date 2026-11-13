@@ -1,10 +1,14 @@
 import { notFound } from "next/navigation"
 import { createOgImage } from "@/lib/og-image"
-import { getPost } from "@/lib/posts"
+import { getPost, getPosts } from "@/lib/posts"
 
 export const runtime = "nodejs"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
+
+export function generateStaticParams() {
+  return getPosts().map((post) => ({ slug: post.slug }))
+}
 
 type Props = {
   params: Promise<{ slug: string }>
