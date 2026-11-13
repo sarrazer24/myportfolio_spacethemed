@@ -14,22 +14,18 @@ const exo2 = Exo_2({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sarra-zerguerras-portfolio.vercel.app"),
   title: "Khayra Sarra Zerguerras - AI & Data Science Portfolio",
   description: "Portfolio of Khayra Sarra Zerguerras, an AI and Data Science engineering student exploring cybersecurity, LLMs, NLP, and AI safety.",
   generator: 'sarra portfolio',
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Khayra Sarra Zerguerras - AI & Data Science Portfolio",
     description: "Portfolio of Khayra Sarra Zerguerras, an AI and Data Science engineering student exploring cybersecurity, LLMs, NLP, and AI safety.",
-    url: "https://sarra-zerguerras-portfolio.vercel.app",
+    url: "/",
     siteName: "Sarra Zerguerras Portfolio",
-    images: [
-      {
-        url: "https://sarra-zerguerras-portfolio.vercel.app/og-preview.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Preview of Sarra Zerguerras Portfolio website",
-      },
-    ],
     locale: "en_US",
     type: "website",
   },
@@ -37,7 +33,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Khayra Sarra Zerguerras - AI & Data Science Portfolio",
     description: "Portfolio of Khayra Sarra Zerguerras, an AI and Data Science engineering student exploring cybersecurity, LLMs, NLP, and AI safety.",
-    images: ["https://sarra-zerguerras-portfolio.vercel.app/og-preview.jpg"],
+    images: ["/opengraph-image"],
   },
 }
 

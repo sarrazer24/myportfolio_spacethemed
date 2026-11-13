@@ -12,7 +12,28 @@ type Props = { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getPost((await params).slug)
-  return post ? { title: `${post.title} - Khayra Sarra Zerguerras`, description: post.summary } : {}
+  if (!post) return {}
+
+  const image = `/blog/${post.slug}/opengraph-image`
+  return {
+    title: `${post.title} - Khayra Sarra Zerguerras`,
+    description: post.summary,
+    alternates: {
+      canonical: `/blog/${post.slug}`,
+    },
+    openGraph: {
+      title: post.title,
+      description: post.summary,
+      url: `/blog/${post.slug}`,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.summary,
+      images: [image],
+    },
+  }
 }
 
 export default async function BlogPostPage({ params }: Props) {
