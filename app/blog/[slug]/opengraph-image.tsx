@@ -12,7 +12,7 @@ type Props = {
 
 export default async function OpenGraphImage({ params }: Props) {
   const post = getPost((await params).slug)
-  if (!post?.content) notFound()
+  if (!post) notFound()
 
   return createOgImage({
     eyebrow: "Sarraverse · Research notes",
