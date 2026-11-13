@@ -21,6 +21,23 @@ export type Post = {
 }
 
 const registry: Omit<Post, "content">[] = [
+
+  {
+    slug: "cbus-reproduction-budget",
+    title: "Can You Tell an LLM to Act Like a 5th Grader? Reproducing CBUS on a Budget",
+    summary: "A from-scratch reproduction of a paper on cognitively bounded LLM user simulators. Testing what its metrics actually reward, exploring capacity constraints, and examining the implications for AI safety.",
+    date: "2026-11-13",
+    category: "Tech & AI",
+    tags: [
+      "LLMs",
+      "User Simulation",
+      "Reproducibility",
+      "AI Safety",
+      "Evaluation"
+    ],
+    platform: "Portfolio",
+  },
+
   {
     slug: "gpi-gridworld-multiseed",
     title: "Generalized Policy Iteration in a Tiny GridWorld: Comparing Two Q-Learning Update Schedules",
