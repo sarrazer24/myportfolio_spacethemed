@@ -47,6 +47,7 @@ const registry: Omit<Post, "content">[] = [
     tags: [
       "LLMs",
       "User Simulation",
+      "Paper Reproduction",
       "Reproducibility",
       "AI Safety",
       "Evaluation"
