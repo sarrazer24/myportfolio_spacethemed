@@ -1,0 +1,251 @@
+When working with machine learning models, we often focus on what a model does: give it an input, observe its output, and evaluate whether the result is correct.
+
+But what actually happens inside the model while it is producing that output?
+
+Imagine watching a movie. You can follow the story, understand the characters, and even read the screenplay beforehand. But wouldn't being on the movie set, watching everything happen behind the scenes, reveal something different? You would see how scenes are constructed, how different elements come together, and how the final result is produced.
+
+Perhaps the same applies to neural networks.
+
+We can observe their inputs and outputs, inspect their architecture, and analyse their parameters. But do we really understand how all these components work together to produce a particular result?
+
+This is the problem that mechanistic interpretability tries to investigate.
+
+---
+
+## What is Mechanistic Interpretability?
+
+Mechanistic interpretability (often abbreviated as MechInterp) is a research field that attempts to understand the internal computations of neural networks.
+
+Instead of treating a model as a black box, researchers try to reverse-engineer its internal mechanisms.
+
+The goal is not simply to identify patterns in the model's behaviour, but to understand how those patterns are represented and processed internally.
+
+For example, researchers might investigate:
+
+- what information a model represents internally
+- how neurons and other components interact
+- how information flows between different layers
+- which internal computations contribute to a particular output
+- how different components work together to perform a task
+
+In other words, we are interested not only in what a neural network learns, but also in how it uses what it has learned.
+
+---
+
+## A simple example
+
+Imagine giving a language model the following sentence:
+
+```text
+The capital of France is ___
+```
+
+The model might predict:
+
+```text
+Paris
+```
+
+From the outside, this looks straightforward.
+
+But internally, the model performs many computations before producing that prediction.
+
+A simplified view might look like this:
+
+```text
+Input sentence
+      |
+      v
+Token representations
+      |
+      v
+Transformer layers
+      |
+      v
+Internal computations
+      |
+      v
+Next-token prediction
+      |
+      v
+     Paris
+```
+
+Each transformer layer contains components that transform and combine information.
+
+The interesting question is what exactly happens during these transformations.
+
+Does the model represent information about France? How does it use that information? Which internal components contribute to predicting Paris?
+
+Mechanistic interpretability attempts to answer questions like these by studying the model's internal representations and computations.
+
+---
+
+## What are researchers looking for?
+
+There are several important concepts that help us understand how researchers approach this problem.
+
+### Neurons and Activations
+
+A neural network contains computational units commonly called neurons.
+
+During a forward pass, these units receive numerical information and produce activations.
+
+An activation is essentially a numerical value indicating how strongly a particular unit responds to the information it receives.
+
+By inspecting activations, researchers can investigate which parts of a network respond to particular inputs.
+
+However, there is an important complication: a neuron does not necessarily correspond to one specific concept.
+
+### Features
+
+A feature is a meaningful pattern or piece of information represented within a neural network.
+
+For example, a model might internally represent information related to:
+
+- programming languages
+- geographical locations
+- positive or negative sentiment
+- mathematical concepts
+- grammatical structures
+
+These are simplified examples of possible features.
+
+Interestingly, a feature does not necessarily correspond to a single neuron. It can be represented across multiple neurons, through patterns of activations.
+
+This distinction is important because understanding individual neurons is not necessarily enough to understand what a model has learned.
+
+### Circuits
+
+Finding individual features is only part of the problem.
+
+Researchers also want to understand how different components interact to perform computations.
+
+These interconnected mechanisms are often called circuits.
+
+A circuit describes how information is processed through multiple components to contribute to a particular behaviour.
+
+For example, researchers have studied circuits involved in predicting repeated patterns of tokens in language models.
+
+One famous example is the induction head: a type of attention-head circuit that can help a model continue a sequence by recognizing patterns that appeared earlier in the context.
+
+This is particularly interesting because it demonstrates that we can sometimes identify specific internal mechanisms responsible for recognizable behaviours.
+
+---
+
+## Why isn't it that simple?
+
+If we could simply inspect every neuron and assign it a meaning, understanding neural networks would be much easier.
+
+Unfortunately, things are more complicated.
+
+One interesting phenomenon is called **polysemanticity**.
+
+A neuron is considered polysemantic when it responds to multiple seemingly unrelated features.
+
+For example, the same neuron might activate in response to certain programming-related patterns and particular geographical references.
+
+This makes it difficult to determine exactly what information a neuron represents.
+
+Another related concept is **superposition**.
+
+Neural networks can represent more features than they have individual dimensions available, using overlapping representations.
+
+This means that several features can be encoded in the same activation space rather than each having a completely separate neuron or dimension.
+
+As a result, understanding a model requires looking beyond individual neurons and investigating the patterns and interactions that emerge across the network.
+
+---
+
+## How do researchers investigate these internal mechanisms?
+
+There are several techniques used in mechanistic interpretability research.
+
+Some examples include:
+
+### Activation Analysis
+
+Researchers inspect the activations produced by different inputs to investigate which internal components respond to particular patterns.
+
+### Activation Patching
+
+This technique involves replacing activations from one model run with activations from another run to investigate whether a particular internal component contributes causally to a behaviour.
+
+For example, if changing the activation of a particular component changes the model's prediction, this provides evidence that the component plays a role in the computation.
+
+### Sparse Autoencoders
+
+Sparse autoencoders (SAEs) are models trained to reconstruct neural network activations using a more sparse representation.
+
+One motivation for using them is to separate overlapping features that might otherwise be difficult to distinguish when inspecting individual neurons.
+
+These techniques provide different ways of investigating the internal structure of neural networks, although none gives us a complete understanding of a model by itself.
+
+---
+
+## Why does this matter for AI safety?
+
+This is where mechanistic interpretability becomes particularly interesting.
+
+When evaluating an AI model, we usually focus on its observable behaviour.
+
+For example, we might test whether an LLM refuses harmful requests, follows instructions correctly, or avoids producing certain types of content.
+
+But a model producing the expected output does not necessarily mean that we understand the internal computations responsible for that behaviour.
+
+Mechanistic interpretability offers another perspective.
+
+By investigating internal representations and circuits, researchers hope to better understand how models process information and what mechanisms contribute to their behaviour.
+
+This could eventually help with questions such as:
+
+- Can we identify internal representations associated with harmful concepts?
+- Can we investigate mechanisms that contribute to deceptive behaviour?
+- Can we better understand how models process conflicting instructions?
+- Can internal mechanisms help us detect behaviours that are difficult to identify through ordinary evaluations?
+
+These are important questions, particularly as AI systems become more capable and are deployed in increasingly consequential settings.
+
+However, identifying an internal feature does not automatically tell us whether a model is safe or unsafe. Understanding how individual mechanisms contribute to complex behaviours remains a difficult research problem.
+
+---
+
+## One question I keep wondering about
+
+There is another analogy that comes to mind when thinking about this.
+
+Imagine reading a novel several times. You might study its different editions, examine the author's original drafts, listen to its audiobook, and even learn about the circumstances in which it was written.
+
+You would probably understand the story quite well.
+
+But would you ever fully understand what was happening inside the author's mind when they first imagined it? The thoughts, associations, emotions, and creative processes that eventually became the story?
+
+Perhaps not.
+
+And I think there is an interesting distinction here when we talk about understanding AI models.
+
+We can observe what a model produces. We can study its architecture, inspect its parameters, and investigate its internal computations. Mechanistic interpretability takes us much closer to understanding the actual mechanisms behind its behaviour.
+
+But understanding those mechanisms is not necessarily the same as understanding everything about the model.
+
+Consider an LLM that consistently refuses a particular category of harmful requests.
+
+We can test it with hundreds of examples and measure how reliably it refuses.
+
+But what if we could also investigate the internal computations associated with those refusals?
+
+Would that give us a better understanding of why the model behaves this way?
+
+And perhaps a more difficult question:
+
+> If a model produces the correct behaviour during evaluation, how can we know whether the internal mechanisms responsible for that behaviour are also what we want?
+
+I think this is one of the most interesting connections between mechanistic interpretability and AI safety.
+
+We have become increasingly good at evaluating what models do. But understanding why they do it is a different challenge entirely.
+
+Maybe building safer AI systems requires more than watching the finished movie.
+
+Maybe we need to step behind the curtains, explore the machinery that brings it to life, and understand as much as we can about what happens there.
+
+Even then, there may be more to understand than we can currently see.

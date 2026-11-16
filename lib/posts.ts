@@ -21,6 +21,22 @@ export type Post = {
 }
 
 const registry: Omit<Post, "content">[] = [
+  
+  {
+    slug: "beyond-the-black-box-mechanistic-interpretability",
+    title: "Beyond the Black Box curtains: What Is Actually Happening Inside an AI Model?",
+    summary: "An introduction to mechanistic interpretability, exploring how neural networks represent information, form computational circuits, and why understanding their inner workings matters for AI safety.",
+    date: "2026-10-16",
+    category: "Tech & AI",
+    tags: [
+      "Mechanistic Interpretability",
+      "Neural Networks",
+      "LLMs",
+      "AI Safety",
+      "Interpretability"
+    ],
+    platform: "Portfolio",
+  },
 
   {
     slug: "cbus-reproduction-budget",
