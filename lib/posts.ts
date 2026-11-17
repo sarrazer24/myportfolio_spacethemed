@@ -21,7 +21,24 @@ export type Post = {
 }
 
 const registry: Omit<Post, "content">[] = [
-  
+
+  {
+    slug: "art-of-looking-up",
+    title: "The Art of Looking Up, and Forgetting to Look Within",
+    summary: "A reflection inspired by Vision and his search for humanity, exploring why we put people on pedestals, underestimate our own potential, and sometimes forget to look within.",
+    date: "2026-11-17",
+    category: "Life & Vlogs",
+    tags: [
+      "Marvel",
+      "Vision",
+      "Philosophy",
+      "Personal Growth",
+      "Identity",
+      "Self-Reflection"
+    ],
+    platform: "Portfolio",
+  },
+
   {
     slug: "beyond-the-black-box-mechanistic-interpretability",
     title: "Beyond the Black Box curtains: What Is Actually Happening Inside an AI Model?",
@@ -61,35 +78,57 @@ const registry: Omit<Post, "content">[] = [
     summary: "A multi-seed GridWorld experiment exploring how interleaved and alternating-batch Q-learning schedules combine value updates and policy improvement.",
     date: "2026-11-03",
     category: "Tech & AI",
-    tags: ["Reinforcement Learning", "Generalized Policy Iteration", "Q-Learning", "GridWorld"],
+    tags: [
+      "Reinforcement Learning",
+      "Generalized Policy Iteration",
+      "Q-Learning",
+      "GridWorld"
+    ],
     platform: "Portfolio",
   },
+
   {
     slug: "navigation-as-video-generation",
     title: "Don't Predict the Action, Imagine the Future: Navigation as Video Generation",
     summary: "How ImagiNav lets a robot learn to navigate from 33 minutes of smartphone footage, and what the results do and don't prove.",
     date: "2026-10-31",
     category: "Tech & AI",
-    tags: ["Robotics", "Video Generation", "Vision-Language Navigation", "Paper Review"],
+    tags: [
+      "Robotics",
+      "Video Generation",
+      "Vision-Language Navigation",
+      "Paper Review"
+    ],
     platform: "Portfolio",
   },
+
   {
     slug: "white-box-testing-looking-inside",
     title: "White-Box Testing: Looking Inside the System",
     summary: "What actually happens behind the scenes of software testing? And why does this matter for AI systems?",
     date: "2026-10-06",
     category: "Tech & AI",
-    tags: ["Software Testing", "LLMs", "AI Safety"],
+    tags: [
+      "Software Testing",
+      "LLMs",
+      "AI Safety"
+    ],
     platform: "Substack",
     externalUrl: "https://sarrazer.substack.com/p/white-box-testing-looking-inside",
   },
+
   {
     slug: "the-average-of-two-signs-is-not-a-sign",
     title: "The Average of Two Signs Is Not a Sign: Building a Text-to-ASL Generator with Diffusion Models",
     summary: "How we built GenSign, an AI that turns text into American Sign Language video, and why averaging breaks sign language generation.",
     date: "2026-07-09",
     category: "Tech & AI",
-    tags: ["Sign Language Generation", "ASL", "Diffusion Models", "GenSign"],
+    tags: [
+      "Sign Language Generation",
+      "ASL",
+      "Diffusion Models",
+      "GenSign"
+    ],
     platform: "Portfolio",
   },
 ]
