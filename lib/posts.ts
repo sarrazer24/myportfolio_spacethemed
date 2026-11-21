@@ -23,6 +23,21 @@ export type Post = {
 const registry: Omit<Post, "content">[] = [
 
   {
+  slug: "reins-mini",
+  title: "Can You Steer a Language Model Into Refusing? Reproducing REINS",
+  summary: "I reproduce REINS, a sparse-autoencoder steering method for safety, on a small open model with free GPUs, to test its claims, its metrics, and what it means for AI safety.",
+  date: "2026-11-20",
+  category: "Tech & AI",
+  tags: [
+    "AI Safety",
+    "Sparse Autoencoders",
+    "LLM Steering",
+    "Paper Reproduction",
+    "LLM Evaluation"
+  ],
+  platform: "Portfolio",
+},
+  {
     slug: "art-of-looking-up",
     title: "The Art of Looking Up, and Forgetting to Look Within",
     summary: "A reflection inspired by Vision and his search for humanity, exploring why we put people on pedestals, underestimate our own potential, and sometimes forget to look within.",
