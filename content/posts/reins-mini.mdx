@@ -3,7 +3,7 @@ title: "Can You Steer a Language Model Into Refusing? Reproducing REINS"
 description: "I reproduce REINS, a sparse-autoencoder steering method for safety, on a small open model with free GPUs, to test its claims, its metrics, and what it means for AI safety."
 date: "2026-11-20"
 tags: ["ai-safety", "sparse-autoencoders", "steering", "reproduction"]
-draft: true
+draft: false
 ---
 
 {/* DRAFT. Every number is either recomputed from the paper's printed tables, taken from my own runs (results/summary_main.csv, results/criteria.json, results/paired_main.csv in the repo), or marked TODO. */}
@@ -15,6 +15,8 @@ That is the promise of SAE steering. A sparse autoencoder (SAE) rewrites a model
 But there is a catch. Harmful requests rarely arrive in plain text. They arrive dressed up as a screenplay, a security audit, or a game design document. The question I wanted to test is: **does feature-level steering still work when the harmful intent is disguised, and what are the headline numbers actually rewarding?**
 
 I decided to reproduce the paper's approach from scratch, using a small open model and free computing resources, and to write down my pass/fail criteria before running anything.
+
+Along the way, this project also became an introduction to something I had been wanting to explore more deeply: **mechanistic interpretability**. I was particularly interested in the idea that we could study a model's internal representations, identify meaningful features, and use them to understand or influence its behaviour. REINS felt like a practical starting point for exploring that intersection between interpretability and AI safety.
 
 **Read the original paper:** [arXiv:2608.28233](https://arxiv.org/abs/2608.28233) · [PDF](https://arxiv.org/pdf/2608.28233) · EMNLP 2026 Main Conference
 
@@ -303,6 +305,8 @@ The thing I will carry into my next project is the detour in the middle. The rel
 I also learned how much a single LLM judge moves the headline: the same outputs are 67% or 78% harmful depending on who reads them, while every comparison between conditions stayed the same.
 
 **Ultimately, I took away a broader lesson: reproduce the behaviour, not just the table, and always measure what your intervention costs on the inputs it should have left alone.**
+
+This project also opened a new direction for me. I've become increasingly interested in mechanistic interpretability: understanding what happens inside language models, how their internal representations relate to their behaviour, and whether we can use that understanding to make them more reliable and safer. This reproduction was my first practical encounter with some of these ideas, and I'd like to explore the field further in future work.
 
 ---
 
