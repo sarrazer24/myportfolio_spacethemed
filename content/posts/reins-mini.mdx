@@ -6,8 +6,6 @@ tags: ["ai-safety", "sparse-autoencoders", "steering", "reproduction"]
 draft: false
 ---
 
-{/* DRAFT. Every number is either recomputed from the paper's printed tables, taken from my own runs (results/summary_main.csv, results/criteria.json, results/paired_main.csv in the repo), or marked TODO. */}
-
 What if you could make a language model refuse harmful requests without retraining it, just by reaching inside and turning a few internal features up or down?
 
 That is the promise of SAE steering. A sparse autoencoder (SAE) rewrites a model's internal activations as a long list of sparse features, some of which seem to correspond to ideas like "drug sourcing" or "I cannot assist with that". If those features are real handles on the model's behaviour, a safety team could edit them at inference time, without touching the weights.
@@ -16,7 +14,16 @@ But there is a catch. Harmful requests rarely arrive in plain text. They arrive 
 
 I decided to reproduce the paper's approach from scratch, using a small open model and free computing resources, and to write down my pass/fail criteria before running anything.
 
-Along the way, this project also became an introduction to something I had been wanting to explore more deeply: **mechanistic interpretability**. I was particularly interested in the idea that we could study a model's internal representations, identify meaningful features, and use them to understand or influence its behaviour. REINS felt like a practical starting point for exploring that intersection between interpretability and AI safety.
+Along the way, this project also became an introduction to something I had been wanting to explore more deeply: **mechanistic interpretability**. I was particularly interested in the idea that we could study a model's internal representations, identify meaningful features, and use them to understand or influence its behaviour. REINS felt like a practical starting point for exploring that intersection between interpretability and AI safety. (If you want the background first, I wrote a short introduction: [Beyond the Black Box curtains](/blog/beyond-the-black-box-mechanistic-interpretability).)
+
+**TL;DR**
+
+- I reproduced REINS (EMNLP 2026), a sparse-autoencoder steering method that makes a model refuse disguised harmful requests, on Qwen3.5-2B-Base using free Kaggle GPUs.
+- **The core claim holds.** Harmful responses fall from about 67% to about 17% (judge A) and from about 78% to about 25% (judge B), explicit refusals rise to 41-56%, collapse stays under 3%, and random controls of the same size do nothing.
+- **One ablation claim does not hold in my run.** Refusal-Enhance alone already removes about 44 points of harmful responses (judge A), so the harm-suppression half adds only about 5 to 6 points (pre-registered criterion C7b fails, under both judges).
+- **The safety gain has a cost:** ungated REINS makes the model refuse 13% of matched safe prompts, and the gate that fixes it uses the true harm category as an oracle.
+- **The judge moves the absolute numbers by about 10 points** (the same outputs are 67% or 78% harmful depending on the judge), while every comparison between conditions stays the same.
+- Everything is pre-registered, with my deviations from the paper listed, and the code is in [reins-mini](https://github.com/sarrazer24/reins-mini).
 
 **Read the original paper:** [arXiv:2608.28233](https://arxiv.org/abs/2608.28233) · [PDF](https://arxiv.org/pdf/2608.28233) · EMNLP 2026 Main Conference
 
@@ -69,13 +76,13 @@ So I made these choices, and flagged each of them as a deviation in the reposito
 
 The authors release code, data and frozen controllers, but no model outputs. So the only offline reference is the paper's tables, and I checked what can be checked.
 
-| Check | Paper says | I recompute |
-| --- | --- | --- |
-| 4B: HRR reduction of REINS vs CorrSteer-A | 39.8% | 39.82% |
-| 4B: SRR ratio vs CorrSteer-A | about 2.7 times | 2.69 times |
-| 2B: HRR reduction vs CorrSteer-A | 49.7% | 49.70% |
-| 2B: SRR ratio vs CorrSteer-A | about 3.7 times | 3.66 times |
-| Row sums of Tables 2, 6, 7 and 10 | 100 | all within rounding |
+| Check                                     | Paper says      | I recompute         |
+| ----------------------------------------- | --------------- | ------------------- |
+| 4B: HRR reduction of REINS vs CorrSteer-A | 39.8%           | 39.82%              |
+| 4B: SRR ratio vs CorrSteer-A              | about 2.7 times | 2.69 times          |
+| 2B: HRR reduction vs CorrSteer-A          | 49.7%           | 49.70%              |
+| 2B: SRR ratio vs CorrSteer-A              | about 3.7 times | 3.66 times          |
+| Row sums of Tables 2, 6, 7 and 10         | 100             | all within rounding |
 
 **All 42 arithmetic checks pass.** I also verified that my implementation of the paper's 2:1 stratified split produces exactly the same 300 evaluation prompts as the authors' own split function.
 
@@ -105,16 +112,16 @@ So I tested it behaviourally. The authors' released gates should open on about 9
 
 ![Gate open rate on matched-safe prompts for five SAE input scales, compared with the paper's 4.7%.](/images/blog/reins/gate_scale.png)
 
-| SAE input scale | Gate open, harmful | Gate open, matched-safe |
-| --- | ---: | ---: |
-| 1 (raw, as in the authors' code) | 99.3% | 3.7% |
-| NMSE-minimising per layer | 100.0% | 97.0% |
-| Sparsity-128 rule, times 0.8 | 100.0% | 25.3% |
-| Sparsity-128 rule, times 1.0 | 100.0% | 68.7% |
-| Sparsity-128 rule, times 1.25 | 100.0% | 90.3% |
-| Paper (2B) | 98.7% | 4.7% (negatives incl. general prompts) |
+| SAE input scale                  | Gate open, harmful |                Gate open, matched-safe |
+| -------------------------------- | -----------------: | -------------------------------------: |
+| 1 (raw, as in the authors' code) |              99.3% |                                   3.7% |
+| NMSE-minimising per layer        |             100.0% |                                  97.0% |
+| Sparsity-128 rule, times 0.8     |             100.0% |                                  25.3% |
+| Sparsity-128 rule, times 1.0     |             100.0% |                                  68.7% |
+| Sparsity-128 rule, times 1.25    |             100.0% |                                  90.3% |
+| Paper (2B)                       |              98.7% | 4.7% (negatives incl. general prompts) |
 
-**Only raw activations reproduce the paper's gate behaviour.** So I ran everything at scale 1, as the authors' code does. Two honest notes: I picked among five variants by closeness to the paper's numbers on the evaluation split, so this is a diagnostic and not independent evidence, and I still cannot explain why the paper's reconstruction-quality numbers do not match what I measured (TODO).
+**Only raw activations reproduce the paper's gate behaviour.** So I ran everything at scale 1, as the authors' code does. Two honest notes: I picked among five variants by closeness to the paper's numbers on the evaluation split, so this is a diagnostic and not independent evidence, and I still cannot explain why the paper's reconstruction-quality numbers do not match what I measured. This is an open question, and I list it under limitations.
 
 ---
 
@@ -122,15 +129,15 @@ So I tested it behaviourally. The authors' released gates should open on about 9
 
 ### Setup
 
-| Parameter | Setting |
-| --- | --- |
-| Model | Qwen3.5-2B-Base, fp16 |
-| Hardware | 2 x NVIDIA T4 (Kaggle) |
-| Evaluation prompts | 300 held-out GUISE prompts (60 per family) |
-| Decoding | greedy, up to 256 new tokens |
-| Judges | Qwen2.5-7B-Instruct (main) and Hermes-3-Llama-3.1-8B (second), my own rubric |
-| Dropped judgments | 0 of 4800 per judge |
-| Seeds | 0 and 1 |
+| Parameter          | Setting                                                                      |
+| ------------------ | ---------------------------------------------------------------------------- |
+| Model              | Qwen3.5-2B-Base, fp16                                                        |
+| Hardware           | 2 x NVIDIA T4 (Kaggle)                                                       |
+| Evaluation prompts | 300 held-out GUISE prompts (60 per family)                                   |
+| Decoding           | greedy, up to 256 new tokens                                                 |
+| Judges             | Qwen2.5-7B-Instruct (main) and Hermes-3-Llama-3.1-8B (second), my own rubric |
+| Dropped judgments  | 0 of 4800 per judge                                                          |
+| Seeds              | 0 and 1                                                                      |
 
 One caveat about the seeds. Decoding is greedy, so the two seeds only change the batch order and the random-control draws. They measure numerical stability and are almost the same experiment twice, not two independent replications. For uncertainty over prompts, use the intervals: with 300 prompts the 95% interval is about plus or minus 5 points.
 
@@ -140,15 +147,15 @@ I ran seven conditions: the unsteered model, two random controls, the two halves
 
 ![Outcome rates for each condition, averaged over two seeds, with the HRR range across seeds.](/images/blog/reins/outcomes.png)
 
-| Method | HRR seed 0 / 1 | SRR seed 0 / 1 | OSR seed 0 / 1 | CR seed 0 / 1 | Paper Table 7 (HRR / SRR / OSR / CR) |
-| --- | --- | --- | --- | --- | --- |
-| Original | 66.7 / 67.0 | 2.0 / 1.7 | 31.3 / 31.3 | 0.0 / 0.0 | 88.7 / 1.7 / 9.7 / 0.0 |
-| Random coordinates (same budget) | 68.0 / 67.0 | 1.7 / 1.7 | 30.3 / 31.3 | 0.0 / 0.0 | 87.3 / 1.7 / 11.0 / 0.0 |
-| Random active coordinates | 67.7 / 64.3 | 2.0 / 1.7 | 30.3 / 34.0 | 0.0 / 0.0 | not in paper |
-| Harm-Inhibit only | 63.3 / 61.7 | 2.3 / 2.3 | 33.7 / 35.3 | 0.7 / 0.7 | not in table |
-| Refusal-Enhance only | 22.7 / 22.7 | 45.3 / 45.3 | 31.3 / 31.0 | 0.7 / 1.0 | not in table |
-| REINS | 17.0 / 17.7 | 54.3 / 55.7 | 26.3 / 24.0 | 2.3 / 2.7 | 24.8 / 43.9 / 18.6 / 12.8 |
-| REINS-Gate | 17.3 / 18.0 | 54.3 / 55.7 | 26.0 / 23.7 | 2.3 / 2.7 | 25.6 / 43.2 / 18.7 / 12.6 |
+| Method                           | HRR seed 0 / 1 | SRR seed 0 / 1 | OSR seed 0 / 1 | CR seed 0 / 1 | Paper Table 7 (HRR / SRR / OSR / CR) |
+| -------------------------------- | -------------- | -------------- | -------------- | ------------- | ------------------------------------ |
+| Original                         | 66.7 / 67.0    | 2.0 / 1.7      | 31.3 / 31.3    | 0.0 / 0.0     | 88.7 / 1.7 / 9.7 / 0.0               |
+| Random coordinates (same budget) | 68.0 / 67.0    | 1.7 / 1.7      | 30.3 / 31.3    | 0.0 / 0.0     | 87.3 / 1.7 / 11.0 / 0.0              |
+| Random active coordinates        | 67.7 / 64.3    | 2.0 / 1.7      | 30.3 / 34.0    | 0.0 / 0.0     | not in paper                         |
+| Harm-Inhibit only                | 63.3 / 61.7    | 2.3 / 2.3      | 33.7 / 35.3    | 0.7 / 0.7     | not in table                         |
+| Refusal-Enhance only             | 22.7 / 22.7    | 45.3 / 45.3    | 31.3 / 31.0    | 0.7 / 1.0     | not in table                         |
+| REINS                            | 17.0 / 17.7    | 54.3 / 55.7    | 26.3 / 24.0    | 2.3 / 2.7     | 24.8 / 43.9 / 18.6 / 12.8            |
+| REINS-Gate                       | 17.3 / 18.0    | 54.3 / 55.7    | 26.0 / 23.7    | 2.3 / 2.7     | 25.6 / 43.2 / 18.7 / 12.6            |
 
 ### What I observed
 
@@ -174,23 +181,23 @@ On matched safe prompts that the unsteered model never refuses (0.0%), ungated R
 
 Before the main run I defined the criteria below and tagged the commit. I kept the thresholds unchanged after seeing the pilot and the results. A criterion passes only if it holds in both seeds.
 
-| ID | Comparison | Threshold | Seed 0 | Seed 1 | Result |
-| --- | --- | --- | --- | --- | --- |
-| C1 | HRR, REINS vs Original | drop of at least 40 points | 66.7 to 17.0 | 67.0 to 17.7 | Pass |
-| C2 | SRR, REINS vs Original and vs random control | at least +25 points over both | 54.3 | 55.7 | Pass |
-| C3 | CR of REINS | at most 15% | 2.3 | 2.7 | Pass |
-| C4 | HRR drop of the equal-budget random control | at most 10 points | -1.3 | 0.0 | Pass |
-| C5 | HRR, Gate vs REINS | within 5 points | 0.3 | 0.3 | Pass |
-| C5b | Gate open rate | at least 90% harmful, at most 15% matched-safe | 99.3 / 3.7 | 99.3 / 3.7 | Pass |
-| C6 | Refusals on matched-safe prompts | REINS at least +10 points; Gate removes at least 70% of it | 0.0 to 13.3; 92% | 0.0 to 13.7; 93% | Pass |
-| C7a | SRR, Harm-only vs REINS | at least 20 points lower | 2.3 vs 54.3 | 2.3 vs 55.7 | Pass |
-| C7b | HRR, Refusal-only vs REINS | at least 15 points higher | 22.7 vs 17.0 | 22.7 vs 17.7 | **Fail** |
+| ID  | Comparison                                   | Threshold                                                  | Seed 0           | Seed 1           | Result   |
+| --- | -------------------------------------------- | ---------------------------------------------------------- | ---------------- | ---------------- | -------- |
+| C1  | HRR, REINS vs Original                       | drop of at least 40 points                                 | 66.7 to 17.0     | 67.0 to 17.7     | Pass     |
+| C2  | SRR, REINS vs Original and vs random control | at least +25 points over both                              | 54.3             | 55.7             | Pass     |
+| C3  | CR of REINS                                  | at most 15%                                                | 2.3              | 2.7              | Pass     |
+| C4  | HRR drop of the equal-budget random control  | at most 10 points                                          | -1.3             | 0.0              | Pass     |
+| C5  | HRR, Gate vs REINS                           | within 5 points                                            | 0.3              | 0.3              | Pass     |
+| C5b | Gate open rate                               | at least 90% harmful, at most 15% matched-safe             | 99.3 / 3.7       | 99.3 / 3.7       | Pass     |
+| C6  | Refusals on matched-safe prompts             | REINS at least +10 points; Gate removes at least 70% of it | 0.0 to 13.3; 92% | 0.0 to 13.7; 93% | Pass     |
+| C7a | SRR, Harm-only vs REINS                      | at least 20 points lower                                   | 2.3 vs 54.3      | 2.3 vs 55.7      | Pass     |
+| C7b | HRR, Refusal-only vs REINS                   | at least 15 points higher                                  | 22.7 vs 17.0     | 22.7 vs 17.7     | **Fail** |
 
 By my own rule (C1 to C4 all pass in both seeds, and again under the second judge), **the core claim reproduces**: a large drop in harmful responses and a shift to explicit refusals, without collapse, and not explained by a random control of the same size.
 
 A few details are worth highlighting.
 
-- **C7b is a real failure, and I report it as one.** The paper's ablation says refusal-only leaves many harmful continuations active. In my run, refusal-only already reaches 22.7% harmful and 45.3% refusals. The C5 and C5b passes are also weaker than they look, for the reason given above.
+- **C7b is a real failure, and I report it as one.** The paper's ablation says refusal-only leaves many harmful continuations active. In my run, refusal-only already reaches 22.7% harmful and 45.3% refusals. The C5 and C5b passes are also weaker than they look, for the reasons given below.
 - **The pilot saw this coming.** In the 20-prompt pilot the same criterion already failed, and I did not touch the threshold.
 - **The gate result was used to choose the SAE scale.** C5b therefore is not independent evidence.
 
@@ -204,19 +211,19 @@ All the numbers above come from one 7B judge, and the paper itself shows that ju
 - **J2:** the two judges agree on the harmful label with a Cohen's kappa of at least 0.40 (pooled).
 - **J3:** under both judges, the harmful rate is highest for Original, lower for Refusal-only, and lowest for REINS, in every seed.
 
-| Condition | HRR judge A (seed 0 / 1) | HRR judge B (seed 0 / 1) | SRR judge A | SRR judge B | Paper Table 7 (HRR / SRR) |
-| --- | --- | --- | --- | --- | --- |
-| Original | 66.7 / 67.0 | 77.7 / 77.7 | 2.0 / 1.7 | 1.3 / 1.0 | 88.7 / 1.7 |
-| Random coordinates | 68.0 / 67.0 | 78.7 / 80.0 | 1.7 / 1.7 | 1.3 / 1.0 | 87.3 / 1.7 |
-| Refusal-Enhance only | 22.7 / 22.7 | 30.7 / 31.7 | 45.3 / 45.3 | 33.7 / 34.0 | not in table |
-| REINS | 17.0 / 17.7 | 24.7 / 25.0 | 54.3 / 55.7 | 40.7 / 42.0 | 24.8 / 43.9 |
-| REINS-Gate | 17.3 / 18.0 | 25.3 / 25.7 | 54.3 / 55.7 | 40.7 / 42.0 | 25.6 / 43.2 |
+| Condition            | HRR judge A (seed 0 / 1) | HRR judge B (seed 0 / 1) | SRR judge A | SRR judge B | Paper Table 7 (HRR / SRR) |
+| -------------------- | ------------------------ | ------------------------ | ----------- | ----------- | ------------------------- |
+| Original             | 66.7 / 67.0              | 77.7 / 77.7              | 2.0 / 1.7   | 1.3 / 1.0   | 88.7 / 1.7                |
+| Random coordinates   | 68.0 / 67.0              | 78.7 / 80.0              | 1.7 / 1.7   | 1.3 / 1.0   | 87.3 / 1.7                |
+| Refusal-Enhance only | 22.7 / 22.7              | 30.7 / 31.7              | 45.3 / 45.3 | 33.7 / 34.0 | not in table              |
+| REINS                | 17.0 / 17.7              | 24.7 / 25.0              | 54.3 / 55.7 | 40.7 / 42.0 | 24.8 / 43.9               |
+| REINS-Gate           | 17.3 / 18.0              | 25.3 / 25.7              | 54.3 / 55.7 | 40.7 / 42.0 | 25.6 / 43.2               |
 
-| ID | Result |
-| --- | --- |
-| J1 | **Pass.** Under judge B, REINS cuts HRR from 77.7 to 24.7 and 25.0, raises SRR to 40.7 and 42.0, collapse stays at 1.3, and the random control moves by -1.0 and -2.3 points. |
-| J2 | **Pass.** Pooled kappa on the harmful label is 0.56 (3600 paired outputs); per condition it ranges from 0.39 to 0.53. That is moderate agreement, not strong. |
-| J3 | **Pass.** Original is above Refusal-only, which is above REINS, under both judges in both seeds. |
+| ID  | Result                                                                                                                                                                        |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| J1  | **Pass.** Under judge B, REINS cuts HRR from 77.7 to 24.7 and 25.0, raises SRR to 40.7 and 42.0, collapse stays at 1.3, and the random control moves by -1.0 and -2.3 points. |
+| J2  | **Pass.** Pooled kappa on the harmful label is 0.56 (3600 paired outputs); per condition it ranges from 0.39 to 0.53. That is moderate agreement, not strong.                 |
+| J3  | **Pass.** Original is above Refusal-only, which is above REINS, under both judges in both seeds.                                                                              |
 
 What I take from it:
 
@@ -233,13 +240,13 @@ What I take from it:
 
 Because C7b failed, I looked at the ablation more closely, comparing conditions on the same prompts (exact McNemar test and a paired bootstrap). The table below uses the main judge; the second judge gives the same picture (see above).
 
-| Comparison (same 300 prompts) | Seed 0 | Seed 1 |
-| --- | --- | --- |
-| HRR, Original to Refusal-only | -44.0 points | -44.3 points |
-| HRR, Refusal-only to REINS | -5.7 points (95% interval -10.3 to -0.7, p = 0.036) | -5.0 points (interval -10.3 to 0.0, p = 0.082) |
-| SRR, Refusal-only to REINS | +9.0 points (p = 0.0045) | +10.3 points (p = 0.0013) |
-| HRR, Original to Harm-only | -3.3 points (interval -8.3 to +2.0, p = 0.26) | -5.3 points (p = 0.068) |
-| HRR, random active coordinates to Harm-only | -4.3 points (p = 0.15) | -2.7 points (p = 0.41) |
+| Comparison (same 300 prompts)               | Seed 0                                              | Seed 1                                         |
+| ------------------------------------------- | --------------------------------------------------- | ---------------------------------------------- |
+| HRR, Original to Refusal-only               | -44.0 points                                        | -44.3 points                                   |
+| HRR, Refusal-only to REINS                  | -5.7 points (95% interval -10.3 to -0.7, p = 0.036) | -5.0 points (interval -10.3 to 0.0, p = 0.082) |
+| SRR, Refusal-only to REINS                  | +9.0 points (p = 0.0045)                            | +10.3 points (p = 0.0013)                      |
+| HRR, Original to Harm-only                  | -3.3 points (interval -8.3 to +2.0, p = 0.26)       | -5.3 points (p = 0.068)                        |
+| HRR, random active coordinates to Harm-only | -4.3 points (p = 0.15)                              | -2.7 points (p = 0.41)                         |
 
 My reading of this table, and nothing more:
 
@@ -249,12 +256,12 @@ My reading of this table, and nothing more:
 - **The effect is uneven across families.** With the unsteered model at 86.7% harmful, hate drops to 23.3% and 18.3% under REINS. In seed 1 the cybercrime family is actually worse under REINS (30.0%) than under refusal-only (23.3%). So the combination does not help everywhere.
 
 | Family (HRR, seed 0) | Original | Refusal-only | REINS |
-| --- | ---: | ---: | ---: |
-| Hate | 86.7 | 33.3 | 23.3 |
-| Cybercrime | 63.3 | 23.3 | 20.0 |
-| Self-harm | 63.3 | 31.7 | 23.3 |
-| Pornography | 55.0 | 13.3 | 11.7 |
-| Violence | 65.0 | 11.7 | 6.7 |
+| -------------------- | -------: | -----------: | ----: |
+| Hate                 |     86.7 |         33.3 |  23.3 |
+| Cybercrime           |     63.3 |         23.3 |  20.0 |
+| Self-harm            |     63.3 |         31.7 |  23.3 |
+| Pornography          |     55.0 |         13.3 |  11.7 |
+| Violence             |     65.0 |         11.7 |   6.7 |
 
 ---
 
@@ -310,11 +317,23 @@ This project also opened a new direction for me. I've become increasingly intere
 
 ---
 
+## What I would do next
+
+These are the extensions I think would be most informative, in the order I would try them:
+
+1. **Run the 4B model**, which the paper reports and GUISE was built against, to check whether C7b still fails when the benchmark is tuned to the model.
+2. **Replace the oracle gate** with a gate that does not use the true harm category, and measure how much of the over-refusal fix survives.
+3. **Test an adaptive attacker:** prompts written to evade the steering itself, since none of my prompts were.
+4. **Rerun the utility panels** with more questions than the paper's 70 and 30, so the differences are larger than the noise.
+5. **Recover the semantic weights** for Harm-Inhibit, or approximate them, to test whether that missing piece explains why the harm-suppression half looks weak in my version.
+
+---
+
 ## References
 
 **Original paper:**
 
-Ding, K.-X., Xu, H.-X., Peng, J.-H., Chen, Z.-Q., Wang, J., & Ling, Z.-H. (2026). REINS: Refusal-Enhanced Inhibitory Steering with Sparse Autoencoder Features. *Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing*. [arXiv:2608.28233](https://arxiv.org/abs/2608.28233)
+Ding, K.-X., Xu, H.-X., Peng, J.-H., Chen, Z.-Q., Wang, J., & Ling, Z.-H. (2026). REINS: Refusal-Enhanced Inhibitory Steering with Sparse Autoencoder Features. _Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing_. [arXiv:2608.28233](https://arxiv.org/abs/2608.28233)
 
 **Original implementation and data:**
 
