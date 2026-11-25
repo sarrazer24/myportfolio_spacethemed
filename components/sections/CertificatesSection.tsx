@@ -106,6 +106,12 @@ const certificates: typeof achievements = [
 		link: "https://drive.google.com/file/d/1i0RhP9g1rVN92irfuKihPLw_2PIUcNli/view?usp=drive_link",
 	},
 	{
+		title: "Future of AI",
+		issuer: "BlueDot Impact",
+		date: "2026",
+		link: "https://drive.google.com/file/d/1JLHMkX2_wDea_t6onqxCMGFp_AG_p-mJ/view?usp=sharing",
+	},
+	{
 		title: "AI Fundamentals",
 		issuer: "DataCamp",
 		date: "2025",
@@ -117,8 +123,8 @@ const participation: typeof achievements = [
 	{
 		title: "Hackathon Participation - Forsatic",
 		issuer: "Algérie Télécom",
-		date: "2025",
-		link: "https://drive.google.com/file/d/1ZjNUpMf6JFE9xAN4LgwtVqkC2O5qzLWW/view?usp=sharing",
+		date: "2026",
+		link: "https://drive.google.com/file/d/1HLl-UWkOSX7TgDYAJtx9Gh4mgYd-ga3m/view?usp=drive_link",
 	},
 	{
 		title: "Datathon Participation - AlphaAI (3rd edition)",
@@ -136,12 +142,6 @@ const participation: typeof achievements = [
 
 const timelineSections = [
 	{
-		label: "Course Achievements",
-		key: "achievements",
-		description: "Completed online courses and learning paths.",
-		data: sortedAchievements,
-	},
-	{
 		label: "Official Certificates",
 		key: "certificates",
 		description: "Recognized certifications from institutions.",
@@ -153,10 +153,16 @@ const timelineSections = [
 		description: "Workshops, hackathons, and community events.",
 		data: participation,
 	},
+	{
+		label: "Course Achievements",
+		key: "achievements",
+		description: "Completed online courses and learning paths.",
+		data: sortedAchievements,
+	},
 ]
 
 export default function CertificatesSection() {
-	const [activeSection, setActiveSection] = useState("achievements")
+	const [activeSection, setActiveSection] = useState("certificates")
 	const [showAll, setShowAll] = useState(false)
 	const [query, setQuery] = useState("")
 
